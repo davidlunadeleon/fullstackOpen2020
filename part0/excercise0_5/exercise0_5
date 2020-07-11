@@ -1,0 +1,33 @@
+title 0.5: Single page app
+
+actor User
+User->browser: go into single page app
+
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa
+server-->browser: spa.html
+
+note over browser:
+Browser requests the CSS file 
+linked in the HTML.
+end note
+
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+server-->browser: main.css
+
+note over browser:
+Browser requests JS file in script
+tag of HTML.
+end note
+
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa.js
+server-->browser: spa.js
+
+note over browser:
+Browser requests JSON file
+requested by main.js.
+end note
+
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.json
+server-->browser: data.json
+browser-->browser: create list of notes
+browser-->User: display notes

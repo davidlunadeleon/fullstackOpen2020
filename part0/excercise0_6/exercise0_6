@@ -1,0 +1,21 @@
+title 0.6: New note
+
+actor User
+User->browser: introduce text of new note
+
+note over browser
+spa.js prevents the default behaviour of
+the submit button and replaces it with
+a new function.
+end note
+
+browser-->browser: format note and redraw notes
+browser-->User: display notes with new note added
+
+note over browser
+call the function sendToServer() with 
+the note parameter.
+end note
+
+browser-->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+server-->server: push new note to list of notes

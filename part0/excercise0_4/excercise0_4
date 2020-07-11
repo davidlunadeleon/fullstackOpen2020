@@ -1,0 +1,41 @@
+title 0.4: new note
+
+actor User
+User->browser: new note content
+
+note over browser:
+User introduces text of new note
+and browser uses POST method to send 
+it to the server.
+end note
+
+browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note
+server-->browser: Refer: https://fullstack-exampleapp.herokuapp.com/notes
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/notes
+server-->browser: notes.html
+
+note over browser:
+Browser requests the CSS file 
+linked in the HTML.
+end note
+
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+server-->browser: main.css
+
+note over browser:
+Browser requests JS file in script
+tag of HTML.
+end note
+
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.js
+server-->browser: main.js
+
+note over browser:
+Browser requests JSON file
+requested by main.js.
+end note
+
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.json
+server-->browser: data.json
+browser-->browser: create list of notes
+browser-->User: display notes
