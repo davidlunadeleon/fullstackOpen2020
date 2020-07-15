@@ -12,20 +12,7 @@ const Button = ({ text, handleClick, value }) => {
 	return <button onClick={func}>{text}</button>;
 };
 
-const DisplayStatistic = ({ text, num }) => {
-	return (
-		<div>
-			{text} {num}
-		</div>
-	);
-};
-
-const App = () => {
-	// save clicks of each button to own state
-	const [good, setGood] = useState(0);
-	const [neutral, setNeutral] = useState(0);
-	const [bad, setBad] = useState(0);
-
+const Statistics = ({ good, neutral, bad }) => {
 	const getPercentage = () => {
 		let ans = good / (good + neutral + bad);
 		if (isNaN(ans)) {
@@ -46,17 +33,30 @@ const App = () => {
 
 	return (
 		<div>
+			<div>good {good} </div>
+			<div>neutral {neutral}</div>
+			<div>bad {bad}</div>
+			<div>all {good + neutral + bad}</div>
+			<div>average {getAverage()}</div>
+			<div>divositive {getPercentage()}</div>
+		</div>
+	);
+};
+
+const App = () => {
+	// save clicks of each button to own state
+	const [good, setGood] = useState(0);
+	const [neutral, setNeutral] = useState(0);
+	const [bad, setBad] = useState(0);
+
+	return (
+		<div>
 			<DisplayTitle text="give feedback" />
 			<Button text="good" handleClick={setGood} value={good} />
 			<Button text="neutral" handleClick={setNeutral} value={neutral} />
 			<Button text="bad" handleClick={setBad} value={bad} />
 			<DisplayTitle text="statistic" />
-			<DisplayStatistic text="good" num={good} />
-			<DisplayStatistic text="neutral" num={neutral} />
-			<DisplayStatistic text="bad" num={bad} />
-			<DisplayStatistic text="all" num={good + neutral + bad} />
-			<DisplayStatistic text="average" num={getAverage()} />
-			<DisplayStatistic text="positive" num={getPercentage()} />
+			<Statistics good={good} bad={bad} neutral={neutral} />
 		</div>
 	);
 };
