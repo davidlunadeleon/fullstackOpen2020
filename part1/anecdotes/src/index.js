@@ -5,9 +5,22 @@ const Button = ({ text, handleClick }) => {
 	return <button onClick={handleClick}>{text}</button>;
 };
 
+const DisplayTitle = ({ text }) => {
+	return <h1>{text}</h1>;
+};
+
+const DisplayP = (props) => {
+	let text = '';
+	for (const key in props) {
+		text += props[key] + ' ';
+	}
+	return <p>{text}</p>;
+};
+
 const App = (props) => {
 	const [selected, setSelected] = useState(0);
 	const [points, setPoints] = useState(new Array(6).fill(0));
+	const [mostVotes, setMostVotes] = useState(0);
 
 	const anecdoteHandler = () => {
 		let temp;
@@ -21,15 +34,25 @@ const App = (props) => {
 		const tempPoints = [...points];
 		tempPoints[selected] += 1;
 		setPoints(tempPoints);
+		if (tempPoints[selected] > tempPoints[mostVotes]) {
+			setMostVotes(selected);
+		}
 	};
 
 	return (
 		<div>
-			<div>{props.anecdotes[selected]}</div>
-			<br />
-			<div>Has {points[selected]} votes</div>
+			<DisplayTitle text="Anecdote of the day" />
+			<DisplayP text={props.anecdotes[selected]} />
+			<DisplayP text="Has" numVotes={points[selected]} moreText="votes" />
 			<Button text="next anecdote" handleClick={anecdoteHandler} />
 			<Button text="vote" handleClick={pointsHandler} />
+			<DisplayTitle text="Anecdote with the most votes" />
+			<DisplayP text={props.anecdotes[mostVotes]} />
+			<DisplayP
+				text="Has"
+				numVotes={points[mostVotes]}
+				moreText="votes"
+			/>
 		</div>
 	);
 };
