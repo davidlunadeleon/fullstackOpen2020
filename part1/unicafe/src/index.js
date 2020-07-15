@@ -13,6 +13,9 @@ const Button = ({ text, handleClick, value }) => {
 };
 
 const Statistics = ({ good, neutral, bad }) => {
+	if (good + bad + neutral === 0) {
+		return <div>No feedback given</div>;
+	}
 	const getPercentage = () => {
 		let ans = good / (good + neutral + bad);
 		if (isNaN(ans)) {
