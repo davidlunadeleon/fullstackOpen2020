@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Course from './Course/Course';
+import Course from './components/Course/Course';
 
 const App = () => {
 	const courses = [
@@ -50,7 +50,7 @@ const App = () => {
 	return (
 		<div>
 			{courses.map((course) => (
-				<Course key={courses.id} course={course} />
+				<Course key={course.id} course={course} />
 			))}
 		</div>
 	);
