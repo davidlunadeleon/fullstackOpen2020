@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const App = () => {
 	const [person, setPerson] = useState([
-		{ name: 'Arto Hellas', number: '1234567890' }
+		{ name: 'Arto Hellas', number: '1234567890' },
+		{ name: 'David', number: '83838383' },
+		{ name: 'Luna', number: '84848484' },
+		{ name: 'Ada', number: '912124142' },
+		{ name: 'Diana', number: '124145151' },
+		{ name: 'Sans', number: '12141451555' }
 	]);
 	const [newName, setNewName] = useState('');
 	const [newPhone, setNewPhone] = useState('');
+	const [newQuery, setNewQuery] = useState('');
+	const [personList, setNewPersonList] = useState(person);
 
 	const handleNewName = (event) => {
 		setNewName(event.target.value);
@@ -14,6 +21,23 @@ const App = () => {
 	const handleNewPhone = (event) => {
 		setNewPhone(event.target.value);
 	};
+
+	const handleNewQuery = (event) => {
+		setNewQuery(event.target.value);
+	};
+
+	useEffect(() => {
+		setNewPersonList(
+			person.filter((person) => {
+				return (
+					person.name
+						.toLowerCase()
+						.includes(newQuery.toLowerCase()) ||
+					person.number.toLowerCase().includes(newQuery.toLowerCase())
+				);
+			})
+		);
+	}, [person, newQuery]);
 
 	const addPerson = (event) => {
 		event.preventDefault();
@@ -49,10 +73,16 @@ const App = () => {
 				</div>
 			</form>
 			<h2>Numbers</h2>
+			<h3>Filter by name or number</h3>
+			<form onSubmit={(event) => event.preventDefault()}>
+				<div>
+					search: <input value={newQuery} onChange={handleNewQuery} />
+				</div>
+			</form>
 			<ul>
-				{person.map((person) => (
-					<li key={person.name}>
-						{person.name} {person.number}
+				{personList.map((personList) => (
+					<li key={personList.name}>
+						{personList.name} {personList.number}
 					</li>
 				))}
 			</ul>
