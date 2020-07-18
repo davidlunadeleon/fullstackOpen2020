@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import NewNumber from './components/NewNumber';
+import Numbers from './components/Numbers';
 
 const App = () => {
 	const [person, setPerson] = useState([
@@ -58,34 +60,19 @@ const App = () => {
 
 	return (
 		<div>
-			<h2>Phonebook</h2>
-			<form>
-				<div>
-					name: <input value={newName} onChange={handleNewName} />
-				</div>
-				<div>
-					number: <input value={newPhone} onChange={handleNewPhone} />
-				</div>
-				<div>
-					<button type="submit" onClick={addPerson}>
-						add
-					</button>
-				</div>
-			</form>
-			<h2>Numbers</h2>
-			<h3>Filter by name or number</h3>
-			<form onSubmit={(event) => event.preventDefault()}>
-				<div>
-					search: <input value={newQuery} onChange={handleNewQuery} />
-				</div>
-			</form>
-			<ul>
-				{personList.map((personList) => (
-					<li key={personList.name}>
-						{personList.name} {personList.number}
-					</li>
-				))}
-			</ul>
+			<h1>Phonebook</h1>
+			<NewNumber
+				newName={newName}
+				newPhone={newPhone}
+				handleNewName={handleNewName}
+				handleNewPhone={handleNewPhone}
+				addPerson={addPerson}
+			/>
+			<Numbers
+				newQuery={newQuery}
+				handleNewQuery={handleNewQuery}
+				personList={personList}
+			/>
 		</div>
 	);
 };
