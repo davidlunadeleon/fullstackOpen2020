@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import NewNumber from './components/NewNumber';
 import Numbers from './components/Numbers';
+import axios from 'axios';
 
 const App = () => {
-	const [person, setPerson] = useState([
-		{ name: 'Arto Hellas', number: '1234567890' },
-		{ name: 'David', number: '83838383' },
-		{ name: 'Luna', number: '84848484' },
-		{ name: 'Ada', number: '912124142' },
-		{ name: 'Diana', number: '124145151' },
-		{ name: 'Sans', number: '12141451555' }
-	]);
+	const [person, setPerson] = useState([]);
 	const [newName, setNewName] = useState('');
 	const [newPhone, setNewPhone] = useState('');
 	const [newQuery, setNewQuery] = useState('');
@@ -40,6 +34,12 @@ const App = () => {
 			})
 		);
 	}, [person, newQuery]);
+
+	useEffect(() => {
+		axios.get('http://localhost:3001/persons').then((response) => {
+			setPerson(response.data);
+		});
+	}, []);
 
 	const addPerson = (event) => {
 		event.preventDefault();
