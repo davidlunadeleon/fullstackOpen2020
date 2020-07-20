@@ -9,7 +9,7 @@ const App = () => {
 	const [countries, setCountries] = useState([]);
 	const [filter, setFilter] = useState('');
 	const [countriesFilter, setCountriesFilter] = useState([]);
-	const [filteredCountries, setNumOfFiltered] = useState(0);
+	const [filteredCountries, setNumOfFiltered] = useState(-1);
 
 	const getCountries = () => {
 		axios.get('https://restcountries.eu/rest/v2/all').then((response) => {
@@ -34,13 +34,25 @@ const App = () => {
 		setFilter(event.target.value);
 	};
 
+	const handleShowCountry = (event) => {
+		setFilter(event.target.id);
+	};
+
 	const displayListOrCountry = () => {
-		if (filteredCountries === 0) {
+		console.log(filteredCountries);
+		if (filteredCountries === -1) {
 			return <p>Loading...</p>;
+		} else if (filteredCountries === 0) {
+			return <p>Country not found</p>;
 		} else if (filteredCountries > 10) {
 			return <p>Too many matches, specify another filter</p>;
 		} else if (filteredCountries > 1) {
-			return <DisplayList list={countriesFilter} />;
+			return (
+				<DisplayList
+					list={countriesFilter}
+					buttonAction={handleShowCountry}
+				/>
+			);
 		} else {
 			return <DisplayCountry country={countriesFilter[0]} />;
 		}
