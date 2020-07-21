@@ -39,7 +39,6 @@ const App = () => {
 	};
 
 	const displayListOrCountry = () => {
-		console.log(filteredCountries);
 		if (filteredCountries === -1) {
 			return <p>Loading...</p>;
 		} else if (filteredCountries === 0) {
