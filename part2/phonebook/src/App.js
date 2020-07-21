@@ -53,7 +53,22 @@ const App = () => {
 			number: newPhone
 		};
 		if (person.some((person) => person.name === newName)) {
-			alert(`${newPerson.name} is already on the phonebook`);
+			if (
+				window.confirm(
+					`${newName} is already on the phonebook. Do you want to replace the old number with the new one?`
+				)
+			) {
+				const id = person.find((person) => person.name === newName).id;
+				phonebookService
+					.update(id, newPerson)
+					.then((response) =>
+						setPerson(
+							person
+								.filter((person) => person.id !== id)
+								.concat(response)
+						)
+					);
+			}
 		} else if (person.some((person) => person.number === newPhone)) {
 			alert(`The number ${newPerson.number} is already on the phonebook`);
 		} else {
