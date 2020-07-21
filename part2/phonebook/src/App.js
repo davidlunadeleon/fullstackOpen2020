@@ -70,6 +70,21 @@ const App = () => {
 		setNewPhone('');
 	};
 
+	const deletePerson = (id) => {
+		if (window.confirm('Are you sure you want to delete this number?')) {
+			phonebookService
+				.deletePhone(id)
+				.then((response) => {
+					setPerson(person.filter((p) => p.id !== id));
+				})
+				.catch((error) =>
+					alert(
+						'There was an error. The number could not be deleted.'
+					)
+				);
+		}
+	};
+
 	return (
 		<div>
 			<h1>Phonebook</h1>
@@ -84,6 +99,7 @@ const App = () => {
 				newQuery={newQuery}
 				handleNewQuery={handleNewQuery}
 				personList={personList}
+				deletePerson={deletePerson}
 			/>
 		</div>
 	);
