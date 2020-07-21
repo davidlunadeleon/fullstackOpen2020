@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NewNumber from './components/NewNumber';
 import Numbers from './components/Numbers';
-import axios from 'axios';
+import phonebookService from './services/phonebook';
 
 const App = () => {
 	const [person, setPerson] = useState([]);
@@ -36,9 +36,14 @@ const App = () => {
 	}, [person, newQuery]);
 
 	useEffect(() => {
-		axios.get('http://localhost:3001/persons').then((response) => {
-			setPerson(response.data);
-		});
+		phonebookService
+			.getAll()
+			.then((allPhones) => {
+				setPerson(allPhones);
+			})
+			.catch((error) =>
+				alert('There was an error retrieving the phonebook')
+			);
 	}, []);
 
 	const addPerson = (event) => {
@@ -52,7 +57,14 @@ const App = () => {
 		} else if (person.some((person) => person.number === newPhone)) {
 			alert(`The number ${newPerson.number} is already on the phonebook`);
 		} else {
-			setPerson(person.concat(newPerson));
+			phonebookService
+				.create(newPerson)
+				.then((addedPerson) => {
+					setPerson(person.concat(addedPerson));
+				})
+				.catch((error) => {
+					alert('There was an error adding the new phone');
+				});
 		}
 		setNewName('');
 		setNewPhone('');
