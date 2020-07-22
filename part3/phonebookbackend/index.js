@@ -14,7 +14,7 @@ const makeId = () => {
 	let id = 0;
 	do {
 		id = Math.floor(Math.random() * 1000);
-	} while (persons.includes((p) => p.id === id));
+	} while (persons.find((p) => p.id === id));
 	return id;
 };
 
@@ -37,6 +37,11 @@ app.route('/api/persons')
 		if (!req.body.name || !req.body.phone) {
 			return res.status(400).json({
 				error: 'Fields missing!'
+			});
+		}
+		if (persons.find((p) => p.name === req.body.name)) {
+			return res.status(400).json({
+				error: 'Name cannot be repeated.'
 			});
 		}
 		const id = makeId();
