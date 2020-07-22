@@ -23,6 +23,16 @@ app.route('/api/persons').get((req, res) => {
 	res.json(persons);
 });
 
+app.route('/api/persons/:id').get((req, res) => {
+	console.log('wenas');
+	const personData = persons.find((p) => p.id === Number(req.params.id));
+	if (personData) {
+		res.json(personData);
+	} else {
+		res.status(404).end();
+	}
+});
+
 const PORT = 3001;
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);
