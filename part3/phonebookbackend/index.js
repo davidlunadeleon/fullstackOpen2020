@@ -1,7 +1,9 @@
 const express = require('express');
-const app = express();
+const morgan = require('morgan');
 
+const app = express();
 app.use(express.json());
+app.use(morgan('tiny'));
 
 let persons = [
 	{ name: 'Arto Hellas', number: '040-123456', id: 1 },
@@ -67,6 +69,12 @@ app.route('/api/persons/:id')
 		persons = persons.filter((p) => p.id != Number(req.params.id));
 		res.status(204).end();
 	});
+
+const unknownEndpoint = (req, res) => {
+	res.status(404).send({ error: 'unknown endpoint' });
+};
+
+app.use(unknownEndpoint);
 
 const PORT = 3001;
 app.listen(PORT, () => {
