@@ -12,9 +12,12 @@ const Numbers = (props) => {
 			/>
 			<ul>
 				{props.personList.map((person) => (
-					<li key={person.name}>
+					<li key={person.name} className="number">
 						{person.name} {person.number}
-						<button onClick={() => props.deletePerson(person.id)}>
+						<button
+							onClick={() => props.deletePerson(person.id)}
+							className="numberButton"
+						>
 							delete
 						</button>
 					</li>

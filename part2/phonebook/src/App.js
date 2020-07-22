@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import NewNumber from './components/NewNumber';
 import Numbers from './components/Numbers';
 import phonebookService from './services/phonebook';
+import Message from './components/Message';
+
+import './index.css';
 
 const App = () => {
 	const [person, setPerson] = useState([]);
@@ -9,6 +12,20 @@ const App = () => {
 	const [newPhone, setNewPhone] = useState('');
 	const [newQuery, setNewQuery] = useState('');
 	const [personList, setNewPersonList] = useState(person);
+	const [message, setMessage] = useState({ type: null, text: null });
+
+	const setMessageAndTimeOut = ({ text, type }) => {
+		setMessage({
+			text: text,
+			type: type
+		});
+		setTimeout(() => {
+			setMessage({
+				text: null,
+				type: null
+			});
+		}, 5000);
+	};
 
 	const handleNewName = (event) => {
 		setNewName(event.target.value);
@@ -68,9 +85,17 @@ const App = () => {
 								.concat(response)
 						)
 					);
+
+				setMessageAndTimeOut({
+					text: `The number of ${newPerson.name} has been updated`,
+					type: 'success'
+				});
 			}
 		} else if (person.some((person) => person.number === newPhone)) {
-			alert(`The number ${newPerson.number} is already on the phonebook`);
+			setMessageAndTimeOut({
+				text: `The number ${newPerson.number} is already on the phonebook`,
+				type: 'error'
+			});
 		} else {
 			phonebookService
 				.create(newPerson)
@@ -78,8 +103,15 @@ const App = () => {
 					setPerson(person.concat(addedPerson));
 				})
 				.catch((error) => {
-					alert('There was an error adding the new phone');
+					setMessageAndTimeOut({
+						text: 'There was an error adding the new phone',
+						type: 'error'
+					});
 				});
+			setMessageAndTimeOut({
+				text: `The number of ${newPerson.name} has been created`,
+				type: 'success'
+			});
 		}
 		setNewName('');
 		setNewPhone('');
@@ -91,18 +123,26 @@ const App = () => {
 				.deletePhone(id)
 				.then((response) => {
 					setPerson(person.filter((p) => p.id !== id));
+					setMessageAndTimeOut({
+						text: `The number has been deleted`,
+						type: 'success'
+					});
 				})
-				.catch((error) =>
-					alert(
-						'There was an error. The number could not be deleted.'
-					)
-				);
+				.catch((error) => {
+					setMessageAndTimeOut({
+						text:
+							'There was an error deleting the number. The number has already been deleted from the server',
+						type: 'error'
+					});
+					setPerson(person.filter((p) => p.id !== id));
+				});
 		}
 	};
 
 	return (
 		<div>
 			<h1>Phonebook</h1>
+			<Message text={message.text} type={message.type} />
 			<NewNumber
 				newName={newName}
 				newPhone={newPhone}
