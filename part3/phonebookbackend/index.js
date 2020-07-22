@@ -58,7 +58,7 @@ app.route('/api/persons')
 		res.json(persons);
 	})
 	.post((req, res) => {
-		if (!req.body.name || !req.body.phone) {
+		if (!req.body.name || !req.body.number) {
 			return res.status(400).json({
 				error: 'Fields missing!'
 			});
@@ -71,7 +71,7 @@ app.route('/api/persons')
 		const id = makeId();
 		const newPerson = {
 			name: req.body.name,
-			phone: req.body.phone,
+			number: req.body.number,
 			id: id
 		};
 		persons = persons.concat(newPerson);
@@ -98,7 +98,7 @@ const unknownEndpoint = (req, res) => {
 
 app.use(unknownEndpoint);
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);
 });
