@@ -23,15 +23,19 @@ app.route('/api/persons').get((req, res) => {
 	res.json(persons);
 });
 
-app.route('/api/persons/:id').get((req, res) => {
-	console.log('wenas');
-	const personData = persons.find((p) => p.id === Number(req.params.id));
-	if (personData) {
-		res.json(personData);
-	} else {
-		res.status(404).end();
-	}
-});
+app.route('/api/persons/:id')
+	.get((req, res) => {
+		const personData = persons.find((p) => p.id === Number(req.params.id));
+		if (personData) {
+			res.json(personData);
+		} else {
+			res.status(404).end();
+		}
+	})
+	.delete((req, res) => {
+		persons = persons.filter((p) => p.id != Number(req.params.id));
+		res.status(204).end();
+	});
 
 const PORT = 3001;
 app.listen(PORT, () => {
