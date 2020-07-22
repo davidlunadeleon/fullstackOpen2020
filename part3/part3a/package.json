@@ -4,6 +4,9 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
+		"build:ui": "rm -rf build && cd ../../part2/notes && npm run build --prod && cp -r build ../../part3/part3a/",
+		"deploy": "cd ../../ && git subtree push --prefix part3/part3a/ part3anotes master",
+		"deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
 		"start": "node index.js",
 		"dev": "nodemon index.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
