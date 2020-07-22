@@ -12,6 +12,13 @@ app.route('/').get((req, res) => {
 	res.send('<h1>Hello world!</h1>');
 });
 
+app.route('/info').get((req, res) => {
+	const date = new Date();
+	res.send(
+		`<p>Phonebook has info of ${persons.length} people.</p><p>${date}</p>`
+	);
+});
+
 app.route('/api/persons').get((req, res) => {
 	res.json(persons);
 });
