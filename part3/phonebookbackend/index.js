@@ -54,27 +54,14 @@ app.route('/api/persons')
 			.catch((error) => next(error));
 	})
 	.post((req, res, next) => {
-		if (!req.body.name || !req.body.number) {
-			return res.status(400).json({
-				error: 'Fields missing!'
-			});
-		}
-		Person.findOne({ name: req.body.name })
-			.then((person) => {
-				if (person) {
-					res.status(400).send({ error: 'Person already exists' });
-				} else {
-					const newPerson = new Person({
-						name: req.body.name,
-						number: req.body.number
-					});
-					newPerson
-						.save()
-						.then((savedPerson) => {
-							res.json(savedPerson);
-						})
-						.catch((error) => next(error));
-				}
+		const newPerson = new Person({
+			name: req.body.name,
+			number: req.body.number
+		});
+		newPerson
+			.save()
+			.then((savedPerson) => {
+				res.json(savedPerson);
 			})
 			.catch((error) => next(error));
 	});
@@ -121,6 +108,8 @@ const errorHandler = (error, req, res, next) => {
 	console.log(error.message);
 	if (error.name === 'CastError') {
 		return res.status(400).send({ error: 'Malformated id.' });
+	} else if (error.name === 'ValidationError') {
+		return res.status(400).json({ error: error.message });
 	}
 	next(error);
 };
