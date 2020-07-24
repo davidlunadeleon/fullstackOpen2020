@@ -1,5 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
+const dotenv = require('dotenv').config();
+const Person = require('./models/person');
 
 const app = express();
 app.use(express.json());
@@ -28,13 +30,6 @@ app.use(
 	})
 );
 
-let persons = [
-	{ name: 'Arto Hellas', number: '040-123456', id: 1 },
-	{ name: 'Ada Lovelace', number: '30-123456', id: 2 },
-	{ name: 'Dan Abramov', number: '12-345678', id: 3 },
-	{ name: 'Pepe Leal', number: '12-901234', id: 4 }
-];
-
 const makeId = () => {
 	let id = 0;
 	do {
@@ -56,7 +51,9 @@ app.route('/info').get((req, res) => {
 
 app.route('/api/persons')
 	.get((req, res) => {
-		res.json(persons);
+		Person.find({}).then((people) => {
+			res.json(people);
+		});
 	})
 	.post((req, res) => {
 		if (!req.body.name || !req.body.number) {
@@ -81,12 +78,9 @@ app.route('/api/persons')
 
 app.route('/api/persons/:id')
 	.get((req, res) => {
-		const personData = persons.find((p) => p.id === Number(req.params.id));
-		if (personData) {
-			res.json(personData);
-		} else {
-			res.status(404).end();
-		}
+		Person.findById(req.params.id).then((person) => {
+			res.json(person);
+		});
 	})
 	.delete((req, res) => {
 		persons = persons.filter((p) => p.id != Number(req.params.id));
