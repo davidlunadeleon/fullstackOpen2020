@@ -58,9 +58,12 @@ const App = () => {
 			.then((allPhones) => {
 				setPerson(allPhones);
 			})
-			.catch((error) =>
-				alert('There was an error retrieving the phonebook')
-			);
+			.catch((error) => {
+				setMessageAndTimeOut({
+					text: `There was an error loading the numbers: ${error.response.data.error}`,
+					type: 'error'
+				});
+			});
 	}, []);
 
 	const addPerson = (event) => {
@@ -84,7 +87,14 @@ const App = () => {
 								.filter((person) => person.id !== id)
 								.concat(response)
 						)
-					);
+					)
+					.catch((error) => {
+						console.log(error.response.data);
+						setMessageAndTimeOut({
+							text: `Phone validation error: ${error.response.data.error}`,
+							type: 'error'
+						});
+					});
 
 				setMessageAndTimeOut({
 					text: `The number of ${newPerson.name} has been updated`,
@@ -103,8 +113,9 @@ const App = () => {
 					setPerson(person.concat(addedPerson));
 				})
 				.catch((error) => {
+					console.log(error.response.data);
 					setMessageAndTimeOut({
-						text: 'There was an error adding the new phone',
+						text: `Phone validation error: ${error.response.data.error}`,
 						type: 'error'
 					});
 				});
@@ -130,8 +141,7 @@ const App = () => {
 				})
 				.catch((error) => {
 					setMessageAndTimeOut({
-						text:
-							'There was an error deleting the number. The number has already been deleted from the server',
+						text: `There was an error deleting the number: ${error.response.data.error}`,
 						type: 'error'
 					});
 					setPerson(person.filter((p) => p.id !== id));

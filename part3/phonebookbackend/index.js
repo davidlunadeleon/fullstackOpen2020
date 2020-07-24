@@ -91,7 +91,11 @@ app.route('/api/persons/:id')
 			name: body.name,
 			number: body.number
 		};
-		Person.findByIdAndUpdate(req.params.id, person, { new: true })
+		Person.findByIdAndUpdate(req.params.id, person, {
+			runValidators: true,
+			context: 'query',
+			new: true
+		})
 			.then((updatedPerson) => {
 				res.json(updatedPerson);
 			})
