@@ -30,15 +30,19 @@ app.use(
 	})
 );
 
-app.route('/').get((req, res) => {
+app.route('/').get((req, res, next) => {
 	res.send('<h1>Hello world!</h1>');
 });
 
 app.route('/info').get((req, res) => {
 	const date = new Date();
-	res.send(
-		`<p>Phonebook has info of ${persons.length} people.</p><p>${date}</p>`
-	);
+	Person.find({})
+		.then((persons) => {
+			res.send(
+				`<p>Phonebook has info of ${persons.length} people.</p><p>${date}</p>`
+			);
+		})
+		.catch((error) => next(error));
 });
 
 app.route('/api/persons')
