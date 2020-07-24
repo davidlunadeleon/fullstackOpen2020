@@ -61,19 +61,13 @@ app.route('/api/persons')
 				error: 'Fields missing!'
 			});
 		}
-		if (persons.find((p) => p.name === req.body.name)) {
-			return res.status(400).json({
-				error: 'Name cannot be repeated.'
-			});
-		}
-		const id = makeId();
-		const newPerson = {
+		const newPerson = new Person({
 			name: req.body.name,
-			number: req.body.number,
-			id: id
-		};
-		persons = persons.concat(newPerson);
-		res.json(newPerson);
+			number: req.body.number
+		});
+		newPerson.save().then((savedPerson) => {
+			res.json(savedPerson);
+		});
 	});
 
 app.route('/api/persons/:id')
