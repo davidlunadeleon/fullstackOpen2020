@@ -30,14 +30,6 @@ app.use(
 	})
 );
 
-const makeId = () => {
-	let id = 0;
-	do {
-		id = Math.floor(Math.random() * 1000);
-	} while (persons.find((p) => p.id === id));
-	return id;
-};
-
 app.route('/').get((req, res) => {
 	res.send('<h1>Hello world!</h1>');
 });
@@ -77,8 +69,9 @@ app.route('/api/persons/:id')
 		});
 	})
 	.delete((req, res) => {
-		persons = persons.filter((p) => p.id != Number(req.params.id));
-		res.status(204).end();
+		Person.findByIdAndRemove(req.params.id).then((result) => {
+			res.status(204).end();
+		});
 	});
 
 const unknownEndpoint = (req, res) => {
