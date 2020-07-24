@@ -2,12 +2,35 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv').config();
 const Note = require('./models/note');
-const { response } = require('express');
+const morgan = require('morgan');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static('build'));
+
+morgan.token('body', (req) => {
+	if (req.method === 'POST') {
+		return JSON.stringify(req.body);
+	} else {
+		return null;
+	}
+});
+
+app.use(
+	morgan(function (tokens, req, res) {
+		return [
+			tokens.method(req, res),
+			tokens.url(req, res),
+			tokens.status(req, res),
+			tokens.res(req, res, 'content-length'),
+			'-',
+			tokens['response-time'](req, res),
+			'ms',
+			tokens.body(req, res)
+		].join(' ');
+	})
+);
 
 let notes = [
 	{
@@ -61,16 +84,54 @@ app.route('/api/notes')
 	});
 
 app.route('/api/notes/:id')
-	.get((req, res) => {
-		Note.findById(req.params.id).then((note) => {
-			res.json(note);
-		});
+	.get((req, res, next) => {
+		Note.findById(req.params.id)
+			.then((note) => {
+				if (note) {
+					res.json(note);
+				} else {
+					res.status(404).end();
+				}
+			})
+			.catch((error) => {
+				next(error);
+			});
 	})
-	.delete((req, res) => {
-		const id = Number(req.params.id);
-		notes = notes.filter((note) => note.id !== id);
-		res.status(204).end();
+	.delete((req, res, next) => {
+		Note.findByIdAndRemove(req.params.id)
+			.then((result) => {
+				res.status(204).end();
+			})
+			.catch((error) => next(error));
+	})
+	.put((req, res, next) => {
+		const body = req.body;
+		const note = {
+			content: body.content,
+			important: body.important
+		};
+		Note.findByIdAndUpdate(req.params.id, note, { new: true })
+			.then((updatedNote) => {
+				res.json(updatedNote);
+			})
+			.catch((error) => next(error));
 	});
+
+const unknownEndpoint = (req, res) => {
+	res.status(404).send({ error: 'unknown endpoint' });
+};
+
+app.use(unknownEndpoint);
+
+const errorHandler = (error, req, res, next) => {
+	console.log(error);
+	if (error.name === 'CastError') {
+		return res.status(400).send({ error: 'Malformated id' });
+	}
+	next(error);
+};
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
