@@ -42,36 +42,69 @@ app.route('/info').get((req, res) => {
 });
 
 app.route('/api/persons')
-	.get((req, res) => {
-		Person.find({}).then((people) => {
-			res.json(people);
-		});
+	.get((req, res, next) => {
+		Person.find({})
+			.then((people) => {
+				res.json(people);
+			})
+			.catch((error) => next(error));
 	})
-	.post((req, res) => {
+	.post((req, res, next) => {
 		if (!req.body.name || !req.body.number) {
 			return res.status(400).json({
 				error: 'Fields missing!'
 			});
 		}
-		const newPerson = new Person({
-			name: req.body.name,
-			number: req.body.number
-		});
-		newPerson.save().then((savedPerson) => {
-			res.json(savedPerson);
-		});
+		Person.findOne({ name: req.body.name })
+			.then((person) => {
+				if (person) {
+					res.status(400).send({ error: 'Person already exists' });
+				} else {
+					const newPerson = new Person({
+						name: req.body.name,
+						number: req.body.number
+					});
+					newPerson
+						.save()
+						.then((savedPerson) => {
+							res.json(savedPerson);
+						})
+						.catch((error) => next(error));
+				}
+			})
+			.catch((error) => next(error));
 	});
 
 app.route('/api/persons/:id')
-	.get((req, res) => {
-		Person.findById(req.params.id).then((person) => {
-			res.json(person);
-		});
+	.get((req, res, next) => {
+		Person.findById(req.params.id)
+			.then((person) => {
+				if (person) {
+					res.json(person);
+				} else {
+					res.status(404).end();
+				}
+			})
+			.catch((error) => next(error));
 	})
-	.delete((req, res) => {
-		Person.findByIdAndRemove(req.params.id).then((result) => {
-			res.status(204).end();
-		});
+	.delete((req, res, next) => {
+		Person.findByIdAndRemove(req.params.id)
+			.then((result) => {
+				res.status(204).end();
+			})
+			.catch((error) => next(error));
+	})
+	.put((req, res, next) => {
+		const body = req.body;
+		const person = {
+			name: body.name,
+			number: body.number
+		};
+		Person.findByIdAndUpdate(req.params.id, person, { new: true })
+			.then((updatedPerson) => {
+				res.json(updatedPerson);
+			})
+			.catch((error) => next(error));
 	});
 
 const unknownEndpoint = (req, res) => {
@@ -79,6 +112,16 @@ const unknownEndpoint = (req, res) => {
 };
 
 app.use(unknownEndpoint);
+
+const errorHandler = (error, req, res, next) => {
+	console.log(error.message);
+	if (error.name === 'CastError') {
+		return res.status(400).send({ error: 'Malformated id.' });
+	}
+	next(error);
+};
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
