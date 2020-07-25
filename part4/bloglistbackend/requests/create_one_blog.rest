@@ -1,0 +1,9 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+	"title": "How to create a Node.js application",
+	"author": "David Luna",
+	"url": "example.com",
+	"likes": 10
+}
