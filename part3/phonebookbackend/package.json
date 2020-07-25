@@ -9,11 +9,13 @@
 		"deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
 		"start": "node index.js",
 		"dev": "nodemon index.js",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"lint": "eslint ."
 	},
 	"author": "David Luna",
 	"license": "MIT",
 	"devDependencies": {
+		"eslint": "^7.5.0",
 		"nodemon": "^2.0.4"
 	},
 	"dependencies": {

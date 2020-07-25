@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const dotenv = require('dotenv').config();
 
 if (process.argv.length < 3) {
 	console.log(
@@ -35,7 +34,7 @@ if (process.argv.length === 3) {
 		name: name,
 		number: number
 	});
-	person.save().then((result) => {
+	person.save().then(() => {
 		console.log(`Added ${name} ${number} to phonebook`);
 		mongoose.connection.close();
 	});

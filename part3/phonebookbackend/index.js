@@ -1,6 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
-const dotenv = require('dotenv').config();
+require('dotenv').config();
 const Person = require('./models/person');
 
 const app = express();
@@ -30,11 +30,11 @@ app.use(
 	})
 );
 
-app.route('/').get((req, res, next) => {
+app.route('/').get((req, res) => {
 	res.send('<h1>Hello world!</h1>');
 });
 
-app.route('/info').get((req, res) => {
+app.route('/info').get((req, res, next) => {
 	const date = new Date();
 	Person.find({})
 		.then((persons) => {
@@ -80,7 +80,7 @@ app.route('/api/persons/:id')
 	})
 	.delete((req, res, next) => {
 		Person.findByIdAndRemove(req.params.id)
-			.then((result) => {
+			.then(() => {
 				res.status(204).end();
 			})
 			.catch((error) => next(error));
