@@ -52,9 +52,34 @@ const mostBlogs = (blogs) => {
 	}
 };
 
+const mostLikes = (blogs) => {
+	const authors = _.groupBy(blogs, 'author');
+	const author = {
+		likes: 0
+	};
+	_.forIn(authors, (value, key) => {
+		const likes = value.reduce((blogLikes, blog) => {
+			return blogLikes + blog.likes;
+		}, 0);
+		if (likes > author.likes) {
+			author['likes'] = likes;
+			author['author'] = key;
+		}
+	});
+	if ('author' in author) {
+		return {
+			author: author.author,
+			likes: author.likes
+		};
+	} else {
+		return {};
+	}
+};
+
 module.exports = {
 	totalLikes,
 	dummy,
 	favoriteBlog,
-	mostBlogs
+	mostBlogs,
+	mostLikes
 };

@@ -105,3 +105,26 @@ describe('Most prolific author', () => {
 		});
 	});
 });
+
+describe('Most liked author', () => {
+	test('No blogs', () => {
+		const result = listHelper.mostLikes(noBlogs);
+		expect(result).toEqual({});
+	});
+
+	test('One blog', () => {
+		const result = listHelper.mostLikes(oneBlog);
+		expect(result).toEqual({
+			author: oneBlog[0].author,
+			likes: oneBlog[0].likes
+		});
+	});
+
+	test('Multiple blogs', () => {
+		const result = listHelper.mostLikes(multipleBlogs);
+		expect(result).toEqual({
+			author: oneBlog[0].author,
+			likes: 40
+		});
+	});
+});
