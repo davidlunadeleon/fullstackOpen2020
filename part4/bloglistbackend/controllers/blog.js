@@ -3,12 +3,11 @@ const Blog = require('../models/blog');
 
 blogRouter
 	.route('/')
-	.get((req, res, next) => {
-		Blog.find({})
-			.then((blogs) => res.json(blogs))
-			.catch((error) => next(error));
+	.get(async (req, res) => {
+		const blogs = await Blog.find({});
+		res.json(blogs);
 	})
-	.post((req, res, next) => {
+	.post(async (req, res) => {
 		const body = req.body;
 
 		const blog = new Blog({
@@ -18,9 +17,8 @@ blogRouter
 			likes: Number(body.likes) || 0
 		});
 
-		blog.save()
-			.then((savedBlog) => res.json(savedBlog))
-			.catch((error) => next(error));
+		const savedBlog = await blog.save();
+		res.json(savedBlog);
 	});
 
 module.exports = blogRouter;
