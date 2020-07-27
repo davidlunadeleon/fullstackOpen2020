@@ -90,6 +90,68 @@ describe('Deleting blogs', () => {
 		const contents = blogsAtEnd.map((b) => b.url);
 		expect(contents).not.toContain(blogToDelete.url);
 	});
+
+	test('Delete non existing blog', async () => {
+		const blogsAtStart = await helper.blogsInDb();
+
+		const id = await helper.nonExistingId();
+		await api.delete(`/api/blogs/${id}`).expect(204);
+
+		const blogsAtEnd = await helper.blogsInDb();
+
+		expect(blogsAtEnd.length).toEqual(blogsAtStart.length);
+	});
+});
+
+describe('Updating blogs', () => {
+	test('Updating blog returns json', async () => {
+		const blogsAtStart = await helper.blogsInDb();
+		const blog = blogsAtStart[0];
+		blog.likes = 100;
+
+		await api
+			.put(`/api/blogs/${blog.id}`)
+			.send(blog)
+			.expect(200)
+			.expect('Content-Type', /application\/json/);
+	});
+
+	test('Update existing blog', async () => {
+		const blogsAtStart = await helper.blogsInDb();
+		const blog = blogsAtStart[0];
+		blog.likes = 100;
+
+		const updatedBlogJson = await api
+			.put(`/api/blogs/${blog.id}`)
+			.send(blog);
+
+		const updatedBlog = {
+			author: updatedBlogJson.body.author,
+			url: updatedBlogJson.body.url,
+			likes: Number(updatedBlogJson.body.likes),
+			title: updatedBlogJson.body.title
+		};
+		const blogsAtEnd = await helper.blogsInDb();
+		const contents = blogsAtEnd.map((b) => {
+			return {
+				author: b.author,
+				url: b.url,
+				likes: b.likes,
+				title: b.title
+			};
+		});
+
+		expect(contents).toContainEqual(updatedBlog);
+	});
+
+	test('Update non exiting blog', async () => {
+		const blogsAtStart = await helper.blogsInDb();
+		const blog = blogsAtStart[0];
+		blog.likes = 100;
+		const id = await helper.nonExistingId();
+
+		await api.put(`/api/blogs/${id}`).send(blog).expect(404);
+	});
 });
 
 afterAll(() => {
