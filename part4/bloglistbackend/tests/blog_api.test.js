@@ -54,6 +54,12 @@ describe('Saving blogs', () => {
 		const newBlog = await api.post('/api/blogs').send(blogToPost);
 		expect(Number(newBlog.body.likes)).toEqual(0);
 	});
+
+	test('Verify that missing required fields return error 400', async () => {
+		const blogToPost = helper.newBlog;
+		delete blogToPost.url;
+		await api.post('/api/blogs').send(blogToPost).expect(400);
+	});
 });
 
 describe('Getting blogs', () => {
