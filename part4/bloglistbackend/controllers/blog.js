@@ -21,4 +21,9 @@ blogRouter
 		res.json(savedBlog);
 	});
 
+blogRouter.route('/:id').delete(async (req, res) => {
+	await Blog.findByIdAndRemove(req.params.id);
+	res.status(204).end();
+});
+
 module.exports = blogRouter;

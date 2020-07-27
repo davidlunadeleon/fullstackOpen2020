@@ -16,12 +16,7 @@ const api = supertest(app);
 
 describe('Saving blogs', () => {
 	test('Saving a blog returns json', async () => {
-		const newBlog = {
-			title: 'Reflections on Trusting Trust',
-			author: 'Ken Thompson',
-			url:
-				'https://www.cs.cmu.edu/~rdriley/487/papers/Thompson_1984_ReflectionsonTrustingTrust.pdf'
-		};
+		const newBlog = helper.newBlog;
 
 		await api
 			.post('/api/blogs')
@@ -78,6 +73,22 @@ describe('Getting blogs', () => {
 	test('Blogs have the id property defined', async () => {
 		const allBlogs = await api.get('/api/blogs');
 		expect(allBlogs.body[0].id).toBeDefined();
+		expect(allBlogs.body[0]._id).not.toBeDefined();
+	});
+});
+
+describe('Deleting blogs', () => {
+	test('Delete existing blog', async () => {
+		const blogsAtStart = await helper.blogsInDb();
+		const blogToDelete = blogsAtStart[0];
+
+		await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+		const blogsAtEnd = await helper.blogsInDb();
+		expect(blogsAtEnd.length).toEqual(helper.initialBlogs.length - 1);
+
+		const contents = blogsAtEnd.map((b) => b.url);
+		expect(contents).not.toContain(blogToDelete.url);
 	});
 });
 
