@@ -20,8 +20,7 @@ describe('Saving blogs', () => {
 			title: 'Reflections on Trusting Trust',
 			author: 'Ken Thompson',
 			url:
-				'https://www.cs.cmu.edu/~rdriley/487/papers/Thompson_1984_ReflectionsonTrustingTrust.pdf',
-			likes: 100
+				'https://www.cs.cmu.edu/~rdriley/487/papers/Thompson_1984_ReflectionsonTrustingTrust.pdf'
 		};
 
 		await api
@@ -32,13 +31,7 @@ describe('Saving blogs', () => {
 	});
 
 	test('Blog is saved in DB', async () => {
-		const newBlog = {
-			title: 'Reflections on Trusting Trust',
-			author: 'Ken Thompson',
-			url:
-				'https://www.cs.cmu.edu/~rdriley/487/papers/Thompson_1984_ReflectionsonTrustingTrust.pdf',
-			likes: 100
-		};
+		const newBlog = helper.newBlog;
 
 		await api.post('/api/blogs').send(newBlog);
 
@@ -49,11 +42,17 @@ describe('Saving blogs', () => {
 			return {
 				title: b.title,
 				author: b.author,
-				url: b.url,
-				likes: b.likes
+				url: b.url
 			};
 		});
 		expect(contents).toContainEqual(newBlog);
+	});
+
+	test('Verify that the likes property is missing from the request', async () => {
+		const blogToPost = helper.newBlog;
+		blogToPost['liles'] = 100;
+		const newBlog = await api.post('/api/blogs').send(blogToPost);
+		expect(Number(newBlog.body.likes)).toEqual(0);
 	});
 });
 

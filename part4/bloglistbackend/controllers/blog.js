@@ -14,7 +14,7 @@ blogRouter
 			title: body.title,
 			author: body.author,
 			url: body.url,
-			likes: Number(body.likes) || 0
+			likes: 0
 		});
 
 		const savedBlog = await blog.save();
