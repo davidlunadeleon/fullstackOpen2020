@@ -15,7 +15,8 @@ logger.info('connecting to', config.MONGOURI);
 mongoose
 	.connect(config.MONGOURI, {
 		useNewUrlParser: true,
-		useUnifiedTopology: true
+		useUnifiedTopology: true,
+		useCreateIndex: true
 	})
 	.then(() => {
 		logger.info('connection successful!');

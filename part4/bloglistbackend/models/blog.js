@@ -4,18 +4,19 @@ mongoose.set('useFindAndModify', false);
 
 const blogSchema = new mongoose.Schema({
 	title: {
-		type: String,
-		required: true
+		type: String
 	},
 	author: {
-		type: String,
-		required: true
+		type: String
 	},
 	url: {
-		type: String,
-		required: true
+		type: String
 	},
-	likes: Number
+	likes: Number,
+	user: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'User'
+	}
 });
 
 blogSchema.set('toJSON', {
