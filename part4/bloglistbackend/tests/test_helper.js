@@ -74,11 +74,6 @@ const nonExistingId = async () => {
 	return blog.id;
 };
 
-const blogsInDb = async () => {
-	const blogs = await Blog.find({});
-	return blogs.map((blog) => blog.toJSON());
-};
-
 const objectsInDb = async (obj) => {
 	const listObj = await obj.find({});
 	return listObj.map((o) => o.toJSON());
@@ -90,6 +85,5 @@ module.exports = {
 	newBlog,
 	newUser,
 	nonExistingId,
-	blogsInDb,
 	objectsInDb
 };

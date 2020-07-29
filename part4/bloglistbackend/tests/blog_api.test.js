@@ -25,7 +25,7 @@ beforeEach(async () => {
 	const blogObjects = await helper.initialBlogs.map((b) => {
 		const newBlog = Object.assign({}, b);
 		const index = Math.floor(Math.random() * users.length);
-		newBlog.user = users[index]._id;
+		newBlog.user = users[index].id;
 		return new Blog(newBlog);
 	});
 	const blogPromiseArray = blogObjects.map((b) => b.save());
@@ -64,7 +64,7 @@ describe('Saving blogs', () => {
 			.send(newBlog)
 			.set({ Authorization: `bearer ${token}` });
 
-		const blogsAtEnd = await helper.blogsInDb();
+		const blogsAtEnd = await helper.objectsInDb(Blog);
 		expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
 
 		const contents = blogsAtEnd.map((b) => {
@@ -122,25 +122,52 @@ describe('Getting blogs', () => {
 
 describe('Deleting blogs', () => {
 	test('Delete existing blog', async () => {
-		const blogsAtStart = await helper.blogsInDb();
+		const blogsAtStart = await helper.objectsInDb(Blog);
 		const blogToDelete = blogsAtStart[0];
+		const user = await User.findById(blogToDelete.user);
+		const users = helper.initialUsers.map((u) => u.username);
+		const index = users.indexOf(user.username);
+		const token = await loginUser(index);
 
-		await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+		await api
+			.delete(`/api/blogs/${blogToDelete.id}`)
+			.set({ Authorization: `bearer ${token}` })
+			.expect(204);
 
-		const blogsAtEnd = await helper.blogsInDb();
+		const blogsAtEnd = await helper.objectsInDb(Blog);
 		expect(blogsAtEnd.length).toEqual(helper.initialBlogs.length - 1);
-
 		const contents = blogsAtEnd.map((b) => b.url);
 		expect(contents).not.toContain(blogToDelete.url);
 	});
 
 	test('Delete non existing blog', async () => {
-		const blogsAtStart = await helper.blogsInDb();
+		const token = await loginUser(0);
+		const blogsAtStart = await helper.objectsInDb(Blog);
 
 		const id = await helper.nonExistingId();
-		await api.delete(`/api/blogs/${id}`).expect(204);
+		await api
+			.delete(`/api/blogs/${id}`)
+			.set({ Authorization: `bearer ${token}` })
+			.expect(204);
 
-		const blogsAtEnd = await helper.blogsInDb();
+		const blogsAtEnd = await helper.objectsInDb(Blog);
+
+		expect(blogsAtEnd.length).toEqual(blogsAtStart.length);
+	});
+
+	test('Cannot delete blog without authorization', async () => {
+		const blogsAtStart = await helper.objectsInDb(Blog);
+		const newUser = Object.assign({}, helper.newUser);
+		const blogToDelete = blogsAtStart[0];
+		await api.post('/api/users').send(newUser);
+		const tokenUser = await api.post('/api/login').send(newUser);
+
+		await api
+			.delete(`/api/blogs/${blogToDelete.id}`)
+			.set({ Authorization: `bearer ${tokenUser.body.token}` })
+			.expect(401);
+
+		const blogsAtEnd = await helper.objectsInDb(Blog);
 
 		expect(blogsAtEnd.length).toEqual(blogsAtStart.length);
 	});
@@ -148,7 +175,7 @@ describe('Deleting blogs', () => {
 
 describe('Updating blogs', () => {
 	test('Updating blog returns json', async () => {
-		const blogsAtStart = await helper.blogsInDb();
+		const blogsAtStart = await helper.objectsInDb(Blog);
 		const blog = blogsAtStart[0];
 		blog.likes = 100;
 
@@ -160,7 +187,7 @@ describe('Updating blogs', () => {
 	});
 
 	test('Update existing blog', async () => {
-		const blogsAtStart = await helper.blogsInDb();
+		const blogsAtStart = await helper.objectsInDb(Blog);
 		const blog = blogsAtStart[0];
 		blog.likes = 100;
 
@@ -174,7 +201,7 @@ describe('Updating blogs', () => {
 			likes: Number(updatedBlogJson.body.likes),
 			title: updatedBlogJson.body.title
 		};
-		const blogsAtEnd = await helper.blogsInDb();
+		const blogsAtEnd = await helper.objectsInDb(Blog);
 		const contents = blogsAtEnd.map((b) => {
 			return {
 				author: b.author,
@@ -188,7 +215,7 @@ describe('Updating blogs', () => {
 	});
 
 	test('Update non exiting blog', async () => {
-		const blogsAtStart = await helper.blogsInDb();
+		const blogsAtStart = await helper.objectsInDb(Blog);
 		const blog = blogsAtStart[0];
 		blog.likes = 100;
 		const id = await helper.nonExistingId();

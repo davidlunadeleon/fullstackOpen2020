@@ -44,7 +44,13 @@ blogRouter
 		if (!blog) {
 			return res.status(204).end();
 		}
-		if (!req.token || !decodedToken.id || user._id === blog.user) {
+		console.log(user._id.toString());
+		console.log(blog.user.toString());
+		if (
+			!req.token ||
+			!decodedToken.id ||
+			user._id.toString() !== blog.user.toString()
+		) {
 			return res.status(401).json({ error: 'Token missing or invalid.' });
 		}
 		await Blog.findByIdAndRemove(req.params.id);
