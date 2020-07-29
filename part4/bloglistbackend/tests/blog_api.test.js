@@ -47,7 +47,7 @@ describe('Saving blogs', () => {
 		const newBlog = helper.newBlog;
 		const token = await loginUser(0);
 
-		const res = await api
+		await api
 			.post('/api/blogs')
 			.send(newBlog)
 			.set({ Authorization: `bearer ${token}` })
