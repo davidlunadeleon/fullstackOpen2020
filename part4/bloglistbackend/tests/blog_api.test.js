@@ -1,34 +1,68 @@
 const mongoose = require('mongoose');
 const supertest = require('supertest');
+const bcrypt = require('bcrypt');
 
 const app = require('../app');
 const Blog = require('../models/blog');
+const User = require('../models/user');
 const helper = require('./test_helper');
 
 beforeEach(async () => {
 	await Blog.deleteMany({});
-	const blogObjects = await helper.initialBlogs.map((b) => new Blog(b));
-	const promiseArray = blogObjects.map((b) => b.save());
-	await Promise.all(promiseArray);
+	await User.deleteMany({});
+
+	const userObjects = await helper.initialUsers.map((b) => {
+		const newUser = Object.assign({}, b);
+		newUser.passwordHash = bcrypt.hashSync(newUser.password, 10);
+		delete newUser.password;
+		return new User(newUser);
+	});
+	const userPromiseArray = await userObjects.map((b) => b.save());
+	await Promise.all(userPromiseArray);
+
+	const users = await helper.objectsInDb(User);
+
+	const blogObjects = await helper.initialBlogs.map((b) => {
+		const newBlog = Object.assign({}, b);
+		const index = Math.floor(Math.random() * users.length);
+		newBlog.user = users[index]._id;
+		return new Blog(newBlog);
+	});
+	const blogPromiseArray = blogObjects.map((b) => b.save());
+	await Promise.all(blogPromiseArray);
 });
 
 const api = supertest(app);
 
+const loginUser = async (index) => {
+	const user = Object.assign({}, helper.initialUsers[index]);
+	delete user.name;
+	const res = await api.post('/api/login').send(user);
+	const body = res.body;
+	return body.token;
+};
+
 describe('Saving blogs', () => {
 	test('Saving a blog returns json', async () => {
 		const newBlog = helper.newBlog;
+		const token = await loginUser(0);
 
-		await api
+		const res = await api
 			.post('/api/blogs')
 			.send(newBlog)
+			.set({ Authorization: `bearer ${token}` })
 			.expect(200)
 			.expect('Content-Type', /application\/json/);
 	});
 
 	test('Blog is saved in DB', async () => {
 		const newBlog = helper.newBlog;
+		const token = await loginUser(0);
 
-		await api.post('/api/blogs').send(newBlog);
+		await api
+			.post('/api/blogs')
+			.send(newBlog)
+			.set({ Authorization: `bearer ${token}` });
 
 		const blogsAtEnd = await helper.blogsInDb();
 		expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
@@ -45,15 +79,24 @@ describe('Saving blogs', () => {
 
 	test('Verify that the likes property is missing from the request', async () => {
 		const blogToPost = helper.newBlog;
-		blogToPost['liles'] = 100;
-		const newBlog = await api.post('/api/blogs').send(blogToPost);
+		const token = await loginUser(0);
+		blogToPost['likes'] = 100;
+		const newBlog = await api
+			.post('/api/blogs')
+			.send(blogToPost)
+			.set({ Authorization: `bearer ${token}` });
 		expect(Number(newBlog.body.likes)).toEqual(0);
 	});
 
 	test('Verify that missing required fields return error 400', async () => {
 		const blogToPost = helper.newBlog;
+		const token = await loginUser(0);
 		delete blogToPost.url;
-		await api.post('/api/blogs').send(blogToPost).expect(400);
+		await api
+			.post('/api/blogs')
+			.send(blogToPost)
+			.set({ Authorization: `bearer ${token}` })
+			.expect(400);
 	});
 });
 

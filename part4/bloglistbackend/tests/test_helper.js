@@ -31,6 +31,26 @@ const initialUsers = [
 		username: 'pepe123',
 		name: 'Pepe Gzz',
 		password: 'agoodpassword'
+	},
+	{
+		username: 'lalo1209',
+		name: 'Lalo Lola',
+		password: '212f1f1o21'
+	},
+	{
+		username: 'pepepepepe',
+		name: 'Pepepepepe',
+		password: 'pepepepepe'
+	},
+	{
+		username: 'notPepe',
+		name: 'Not Pepe',
+		password: 'thisisnotpepe'
+	},
+	{
+		username: 'awitadecoco',
+		name: 'Awita de Coco',
+		password: 'awitadecoco9000'
 	}
 ];
 

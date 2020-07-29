@@ -4,13 +4,16 @@ mongoose.set('useFindAndModify', false);
 
 const blogSchema = new mongoose.Schema({
 	title: {
-		type: String
+		type: String,
+		required: true
 	},
 	author: {
-		type: String
+		type: String,
+		required: true
 	},
 	url: {
-		type: String
+		type: String,
+		required: true
 	},
 	likes: Number,
 	user: {
