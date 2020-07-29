@@ -21,11 +21,30 @@ const initialBlogs = [
 	}
 ];
 
+const initialUsers = [
+	{
+		username: 'root',
+		name: 'Root User',
+		password: 'rootPassword'
+	},
+	{
+		username: 'pepe123',
+		name: 'Pepe Gzz',
+		password: 'agoodpassword'
+	}
+];
+
 const newBlog = {
 	title: 'Reflections on Trusting Trust',
 	author: 'Ken Thompson',
 	url:
 		'https://www.cs.cmu.edu/~rdriley/487/papers/Thompson_1984_ReflectionsonTrustingTrust.pdf'
+};
+
+const newUser = {
+	username: 'davidLuna',
+	name: 'David Luna',
+	password: '12345'
 };
 
 const nonExistingId = async () => {
@@ -40,9 +59,17 @@ const blogsInDb = async () => {
 	return blogs.map((blog) => blog.toJSON());
 };
 
+const objectsInDb = async (obj) => {
+	const listObj = await obj.find({});
+	return listObj.map((o) => o.toJSON());
+};
+
 module.exports = {
 	initialBlogs,
+	initialUsers,
+	newBlog,
+	newUser,
 	nonExistingId,
 	blogsInDb,
-	newBlog
+	objectsInDb
 };
