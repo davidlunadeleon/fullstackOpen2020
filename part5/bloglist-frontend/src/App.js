@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Blogs from './components/Blogs';
 import Login from './components/Login';
 import Notification from './components/Notification';
+import AddBlogs from './components/AddBlogs';
 
 import blogService from './services/blogs';
 import loginService from './services/login';
@@ -13,6 +14,9 @@ const App = () => {
 	const [blogs, setBlogss] = useState([]);
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
+	const [author, setAuthor] = useState('');
+	const [title, setTitle] = useState('');
+	const [url, setUrl] = useState('');
 	const [user, setUser] = useState(null);
 	const [notification, setNotification] = useState(null);
 
@@ -32,6 +36,12 @@ const App = () => {
 		}
 	}, []);
 
+	useEffect(() => {
+		if (user) {
+			blogService.setToken(user.token);
+		}
+	}, [user]);
+
 	const handleLogin = async (event) => {
 		event.preventDefault();
 		try {
@@ -46,6 +56,21 @@ const App = () => {
 			showNotification('info', 'Log in successful');
 		} catch (exception) {
 			showNotification('error', 'Invalid credentials');
+		}
+	};
+
+	const handleCreateBlog = async (event) => {
+		event.preventDefault();
+		try {
+			const blogToPost = {
+				author: author,
+				title: title,
+				url: url
+			};
+			const newBlog = await blogService.postBlog(blogToPost);
+			setBlogss(blogs.concat(newBlog));
+		} catch (exception) {
+			showNotification('error', 'Cannot create blog. Try again.');
 		}
 	};
 
@@ -80,6 +105,15 @@ const App = () => {
 			) : (
 				<div>
 					<button onClick={logout}>Log out</button>
+					<AddBlogs
+						url={url}
+						title={title}
+						author={author}
+						setTitle={setTitle}
+						setAuthor={setAuthor}
+						setUrl={setUrl}
+						handleCreateBlog={handleCreateBlog}
+					/>
 					<Blogs blogs={blogs} />
 				</div>
 			)}
