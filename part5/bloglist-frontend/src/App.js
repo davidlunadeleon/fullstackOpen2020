@@ -24,6 +24,14 @@ const App = () => {
 		fetchBlogs();
 	}, []);
 
+	useEffect(() => {
+		const loggedBlogUser = window.localStorage.getItem('loggedBlogUser');
+		if (loggedBlogUser) {
+			const savedUser = JSON.parse(loggedBlogUser);
+			setUser(savedUser);
+		}
+	}, []);
+
 	const handleLogin = async (event) => {
 		event.preventDefault();
 		try {
@@ -31,6 +39,7 @@ const App = () => {
 				username,
 				password
 			});
+			window.localStorage.setItem('loggedBlogUser', JSON.stringify(user));
 			setUser(user);
 			setUsername('');
 			setPassword('');
@@ -51,6 +60,11 @@ const App = () => {
 		}, 3000);
 	};
 
+	const logout = () => {
+		window.localStorage.removeItem('loggedBlogUser');
+		setUser(null);
+	};
+
 	return (
 		<div>
 			<h1>Blog List App</h1>
@@ -64,7 +78,10 @@ const App = () => {
 					handleLogin={handleLogin}
 				/>
 			) : (
-				<Blogs blogs={blogs} />
+				<div>
+					<button onClick={logout}>Log out</button>
+					<Blogs blogs={blogs} />
+				</div>
 			)}
 		</div>
 	);
