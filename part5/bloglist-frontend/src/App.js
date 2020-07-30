@@ -69,6 +69,10 @@ const App = () => {
 			};
 			const newBlog = await blogService.postBlog(blogToPost);
 			setBlogss(blogs.concat(newBlog));
+			setTitle('');
+			setAuthor('');
+			setUrl('');
+			showNotification('info', 'Blog created.');
 		} catch (exception) {
 			showNotification('error', 'Cannot create blog. Try again.');
 		}
@@ -87,6 +91,7 @@ const App = () => {
 
 	const logout = () => {
 		window.localStorage.removeItem('loggedBlogUser');
+		showNotification('info', 'Logged out.');
 		setUser(null);
 	};
 
