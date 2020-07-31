@@ -15,9 +15,6 @@ const App = () => {
 	const [blogs, setBlogss] = useState([]);
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
-	const [author, setAuthor] = useState('');
-	const [title, setTitle] = useState('');
-	const [url, setUrl] = useState('');
 	const [user, setUser] = useState(null);
 	const [notification, setNotification] = useState(null);
 
@@ -62,20 +59,11 @@ const App = () => {
 		}
 	};
 
-	const handleCreateBlog = async (event) => {
-		event.preventDefault();
+	const handleCreateBlog = async (blogObject) => {
 		try {
 			blogFormRef.current.toggleVisibility();
-			const blogToPost = {
-				author: author,
-				title: title,
-				url: url
-			};
-			const newBlog = await blogService.postBlog(blogToPost);
+			const newBlog = await blogService.postBlog(blogObject);
 			setBlogss(blogs.concat(newBlog));
-			setTitle('');
-			setAuthor('');
-			setUrl('');
 			showNotification('info', 'Blog created.');
 		} catch (exception) {
 			showNotification('error', 'Cannot create blog. Try again.');
@@ -115,15 +103,7 @@ const App = () => {
 				<div>
 					<button onClick={logout}>Log out</button>
 					<Togglable buttonLabel="create new blog" ref={blogFormRef}>
-						<AddBlogs
-							url={url}
-							title={title}
-							author={author}
-							setTitle={setTitle}
-							setAuthor={setAuthor}
-							setUrl={setUrl}
-							handleCreateBlog={handleCreateBlog}
-						/>
+						<AddBlogs handleCreateBlog={handleCreateBlog} />
 					</Togglable>
 					<Blogs blogs={blogs} />
 				</div>

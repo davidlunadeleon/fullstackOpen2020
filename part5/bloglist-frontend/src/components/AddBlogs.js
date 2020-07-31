@@ -1,17 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const AddBlogs = (props) => {
+const AddBlogs = ({ handleCreateBlog }) => {
+	const [title, setTitle] = useState('');
+	const [url, setUrl] = useState('');
+	const [author, setAuthor] = useState('');
+
+	const createBlog = (event) => {
+		event.preventDefault();
+		handleCreateBlog({
+			title: title,
+			url: url,
+			author: author
+		});
+		setTitle('');
+		setAuthor('');
+		setUrl('');
+	};
+
 	return (
 		<div>
 			<h2>Create new blog</h2>
-			<form onSubmit={props.handleCreateBlog}>
+			<form onSubmit={createBlog}>
 				<div className="form-input">
 					Title:{' '}
 					<input
 						type="text"
-						value={props.title}
+						value={title}
 						onChange={({ target }) => {
-							props.setTitle(target.value);
+							setTitle(target.value);
 						}}
 					/>
 				</div>
@@ -19,9 +35,9 @@ const AddBlogs = (props) => {
 					Author:{' '}
 					<input
 						type="text"
-						value={props.author}
+						value={author}
 						onChange={({ target }) => {
-							props.setAuthor(target.value);
+							setAuthor(target.value);
 						}}
 					/>
 				</div>
@@ -29,9 +45,9 @@ const AddBlogs = (props) => {
 					Url:{' '}
 					<input
 						type="text"
-						value={props.url}
+						value={url}
 						onChange={({ target }) => {
-							props.setUrl(target.value);
+							setUrl(target.value);
 						}}
 					/>
 				</div>
