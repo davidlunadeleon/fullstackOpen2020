@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import Blogs from './components/Blogs';
 import Login from './components/Login';
 import Notification from './components/Notification';
 import AddBlogs from './components/AddBlogs';
+import Togglable from './components/Togglable';
 
 import blogService from './services/blogs';
 import loginService from './services/login';
@@ -19,6 +20,8 @@ const App = () => {
 	const [url, setUrl] = useState('');
 	const [user, setUser] = useState(null);
 	const [notification, setNotification] = useState(null);
+
+	const blogFormRef = useRef();
 
 	useEffect(() => {
 		async function fetchBlogs() {
@@ -62,6 +65,7 @@ const App = () => {
 	const handleCreateBlog = async (event) => {
 		event.preventDefault();
 		try {
+			blogFormRef.current.toggleVisibility();
 			const blogToPost = {
 				author: author,
 				title: title,
@@ -110,15 +114,17 @@ const App = () => {
 			) : (
 				<div>
 					<button onClick={logout}>Log out</button>
-					<AddBlogs
-						url={url}
-						title={title}
-						author={author}
-						setTitle={setTitle}
-						setAuthor={setAuthor}
-						setUrl={setUrl}
-						handleCreateBlog={handleCreateBlog}
-					/>
+					<Togglable buttonLabel="create new blog" ref={blogFormRef}>
+						<AddBlogs
+							url={url}
+							title={title}
+							author={author}
+							setTitle={setTitle}
+							setAuthor={setAuthor}
+							setUrl={setUrl}
+							handleCreateBlog={handleCreateBlog}
+						/>
+					</Togglable>
 					<Blogs blogs={blogs} />
 				</div>
 			)}
