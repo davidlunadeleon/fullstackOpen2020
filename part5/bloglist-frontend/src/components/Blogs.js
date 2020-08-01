@@ -4,6 +4,8 @@ import Togglable from './Togglable';
 import Blog from './Blog';
 
 const Blogs = ({ blogs, handleLikes }) => {
+	blogs.sort((b1, b2) => b2.likes - b1.likes);
+
 	return (
 		<div>
 			<h2>Blogs</h2>
