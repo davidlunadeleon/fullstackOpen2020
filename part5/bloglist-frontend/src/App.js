@@ -13,8 +13,6 @@ import './App.css';
 
 const App = () => {
 	const [blogs, setBlogss] = useState([]);
-	const [username, setUsername] = useState('');
-	const [password, setPassword] = useState('');
 	const [user, setUser] = useState(null);
 	const [notification, setNotification] = useState(null);
 
@@ -42,8 +40,7 @@ const App = () => {
 		}
 	}, [user]);
 
-	const handleLogin = async (event) => {
-		event.preventDefault();
+	const handleLogin = async (username, password) => {
 		try {
 			const user = await loginService.login({
 				username,
@@ -51,8 +48,6 @@ const App = () => {
 			});
 			window.localStorage.setItem('loggedBlogUser', JSON.stringify(user));
 			setUser(user);
-			setUsername('');
-			setPassword('');
 			showNotification('info', 'Log in successful');
 		} catch (exception) {
 			showNotification('error', 'Invalid credentials');
@@ -92,13 +87,7 @@ const App = () => {
 			<h1>Blog List App</h1>
 			<Notification notification={notification} />
 			{user === null ? (
-				<Login
-					username={username}
-					password={password}
-					setUsername={setUsername}
-					setPassword={setPassword}
-					handleLogin={handleLogin}
-				/>
+				<Login handleLogin={handleLogin} />
 			) : (
 				<div>
 					<button onClick={logout}>Log out</button>
