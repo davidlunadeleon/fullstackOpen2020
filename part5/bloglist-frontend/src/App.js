@@ -58,6 +58,9 @@ const App = () => {
 		try {
 			blogFormRef.current.toggleVisibility();
 			const newBlog = await blogService.postBlog(blogObject);
+			newBlog.user = {};
+			newBlog.user.name = user.name;
+			newBlog.user.username = user.username;
 			setBlogss(blogs.concat(newBlog));
 			showNotification('info', 'Blog created.');
 		} catch (exception) {
@@ -91,7 +94,11 @@ const App = () => {
 			) : (
 				<div>
 					<button onClick={logout}>Log out</button>
-					<Togglable buttonLabel="create new blog" ref={blogFormRef}>
+					<Togglable
+						showButtonLabel="Create new blog"
+						hideButtonLabel="cancel"
+						ref={blogFormRef}
+					>
 						<AddBlogs handleCreateBlog={handleCreateBlog} />
 					</Togglable>
 					<Blogs blogs={blogs} />

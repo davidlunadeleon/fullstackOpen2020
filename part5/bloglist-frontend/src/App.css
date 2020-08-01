@@ -75,3 +75,15 @@ body {
 button {
 	margin: 1em;
 }
+
+.blog-style {
+	border: 1px solid black;
+	margin: 1em;
+	padding: 1em;
+}
+
+.like-button {
+	display: inline-block;
+	margin: auto;
+	margin-left: 1em;
+}
