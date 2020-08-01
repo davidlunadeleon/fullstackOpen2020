@@ -1,24 +1,9 @@
 import React from 'react';
 
 import Togglable from './Togglable';
+import Blog from './Blog';
 
-const Blogs = ({ blogs }) => {
-	const blogContent = (blog) => {
-		return (
-			<div>
-				<p>
-					Url: <a href={blog.url}>{blog.url}</a>
-				</p>
-				<p>
-					Likes: {blog.likes}
-					<button className="like-button">Like</button>
-				</p>
-				<p>User: {blog.user.name}</p>
-				<p>Username: {blog.user.username}</p>
-			</div>
-		);
-	};
-
+const Blogs = ({ blogs, handleLikes }) => {
 	return (
 		<div>
 			<h2>Blogs</h2>
@@ -26,7 +11,7 @@ const Blogs = ({ blogs }) => {
 				<div key={blog.id} className="blog-style">
 					{blog.title} by {blog.author}
 					<Togglable showButtonLabel="View" hideButtonLabel="Hide">
-						{blogContent(blog)}
+						<Blog blog={blog} handleLikes={handleLikes} />
 					</Togglable>
 				</div>
 			))}

@@ -85,6 +85,32 @@ const App = () => {
 		setUser(null);
 	};
 
+	const handleLikes = async (blog) => {
+		const newBlogs = blogs;
+		const previousBlog = blogs.find((b) => b.id === blog.id);
+		const index = newBlogs.indexOf(previousBlog);
+		if (index > -1) {
+			newBlogs[index].likes = blog.likes;
+			try {
+				const updatedBlog = newBlogs[index];
+				await blogService.putBlog(
+					{
+						user: updatedBlog.user.id,
+						likes: updatedBlog.likes,
+						author: updatedBlog.author,
+						title: updatedBlog.title,
+						url: updatedBlog.url
+					},
+					updatedBlog.id
+				);
+				showNotification('info', 'Blog updated');
+				setBlogss(newBlogs);
+			} catch (exception) {
+				showNotification('error', 'Blog could not be updated');
+			}
+		}
+	};
+
 	return (
 		<div>
 			<h1>Blog List App</h1>
@@ -101,7 +127,7 @@ const App = () => {
 					>
 						<AddBlogs handleCreateBlog={handleCreateBlog} />
 					</Togglable>
-					<Blogs blogs={blogs} />
+					<Blogs blogs={blogs} handleLikes={handleLikes} />
 				</div>
 			)}
 		</div>
