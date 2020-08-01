@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Togglable from './Togglable';
 import Blog from './Blog';
@@ -24,6 +25,13 @@ const Blogs = ({ blogs, handleLikes, username, handleDelete }) => {
 			))}
 		</div>
 	);
+};
+
+Blogs.propTypes = {
+	blogs: PropTypes.array.isRequired,
+	handleLikes: PropTypes.func.isRequired,
+	username: PropTypes.string.isRequired,
+	handleDelete: PropTypes.func.isRequired
 };
 
 export default Blogs;

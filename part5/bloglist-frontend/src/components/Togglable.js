@@ -37,4 +37,6 @@ const Togglable = React.forwardRef((props, ref) => {
 	return <div>{visible ? showWhenVisible() : hiddenWhenVisible()}</div>;
 });
 
+Togglable.displayName = 'Togglable';
+
 export default Togglable;
