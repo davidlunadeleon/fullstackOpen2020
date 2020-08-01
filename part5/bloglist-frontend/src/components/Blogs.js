@@ -3,7 +3,7 @@ import React from 'react';
 import Togglable from './Togglable';
 import Blog from './Blog';
 
-const Blogs = ({ blogs, handleLikes }) => {
+const Blogs = ({ blogs, handleLikes, username, handleDelete }) => {
 	blogs.sort((b1, b2) => b2.likes - b1.likes);
 
 	return (
@@ -13,7 +13,12 @@ const Blogs = ({ blogs, handleLikes }) => {
 				<div key={blog.id} className="blog-style">
 					{blog.title} by {blog.author}
 					<Togglable showButtonLabel="View" hideButtonLabel="Hide">
-						<Blog blog={blog} handleLikes={handleLikes} />
+						<Blog
+							blog={blog}
+							handleLikes={handleLikes}
+							username={username}
+							handleDelete={handleDelete}
+						/>
 					</Togglable>
 				</div>
 			))}
