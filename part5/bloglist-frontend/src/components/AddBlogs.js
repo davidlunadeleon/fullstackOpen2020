@@ -30,6 +30,7 @@ const AddBlogs = ({ handleCreateBlog }) => {
 						onChange={({ target }) => {
 							setTitle(target.value);
 						}}
+						id="inputTitle"
 					/>
 				</div>
 				<div className="form-input">
@@ -40,6 +41,7 @@ const AddBlogs = ({ handleCreateBlog }) => {
 						onChange={({ target }) => {
 							setAuthor(target.value);
 						}}
+						id="inputAuthor"
 					/>
 				</div>
 				<div className="form-input">
@@ -50,6 +52,7 @@ const AddBlogs = ({ handleCreateBlog }) => {
 						onChange={({ target }) => {
 							setUrl(target.value);
 						}}
+						id="inputUrl"
 					/>
 				</div>
 				<button type="submit">Create</button>
