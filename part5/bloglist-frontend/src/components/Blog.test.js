@@ -37,4 +37,23 @@ describe('<Blog />', () => {
 		expect(component.container).not.toHaveTextContent(`${blog.url}`);
 		expect(component.container).not.toHaveTextContent(`${blog.likes}`);
 	});
+
+	test('Likes and url are shown after clicking on view button', () => {
+		const mockHandlerLikes = jest.fn();
+		const mockHandlerDelete = jest.fn();
+		const component = render(
+			<Blog
+				blog={blog}
+				username={blog.user.username}
+				handleDelete={mockHandlerDelete}
+				handleLikes={mockHandlerLikes}
+			/>
+		);
+
+		const button = component.container.querySelector('.view-button');
+		fireEvent.click(button);
+
+		expect(component.container).toHaveTextContent(`${blog.url}`);
+		expect(component.container).toHaveTextContent(`${blog.likes}`);
+	});
 });
