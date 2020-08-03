@@ -19,10 +19,12 @@ const blog = {
 };
 
 describe('<Blog />', () => {
-	test('Initial render show title and author only', () => {
-		const mockHandlerLikes = jest.fn();
-		const mockHandlerDelete = jest.fn();
-		const component = render(
+	let component, mockHandlerDelete, mockHandlerLikes;
+
+	beforeEach(() => {
+		mockHandlerLikes = jest.fn();
+		mockHandlerDelete = jest.fn();
+		component = render(
 			<Blog
 				blog={blog}
 				username={blog.user.username}
@@ -30,6 +32,9 @@ describe('<Blog />', () => {
 				handleLikes={mockHandlerLikes}
 			/>
 		);
+	});
+
+	test('Initial render show title and author only', () => {
 		expect(component.container).toHaveTextContent(
 			`${blog.title} by ${blog.author}`
 		);
@@ -39,21 +44,20 @@ describe('<Blog />', () => {
 	});
 
 	test('Likes and url are shown after clicking on view button', () => {
-		const mockHandlerLikes = jest.fn();
-		const mockHandlerDelete = jest.fn();
-		const component = render(
-			<Blog
-				blog={blog}
-				username={blog.user.username}
-				handleDelete={mockHandlerDelete}
-				handleLikes={mockHandlerLikes}
-			/>
-		);
-
 		const button = component.container.querySelector('.view-button');
 		fireEvent.click(button);
 
 		expect(component.container).toHaveTextContent(`${blog.url}`);
 		expect(component.container).toHaveTextContent(`${blog.likes}`);
+	});
+
+	test('Like events are triggered properly', () => {
+		const viewButton = component.container.querySelector('.view-button');
+		fireEvent.click(viewButton);
+
+		const likeButton = component.container.querySelector('.like-button');
+		fireEvent.click(likeButton);
+		fireEvent.click(likeButton);
+		expect(mockHandlerLikes.mock.calls).toHaveLength(2);
 	});
 });
