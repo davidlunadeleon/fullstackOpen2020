@@ -86,6 +86,23 @@ describe('Blog app', () => {
 				cy.contains('View').click();
 				cy.get('.remove-blog-button').should('not.exist');
 			});
+
+			it.only('Blogs are sorted by likes', () => {
+				cy.contains('View').click();
+				cy.contains('Likes').contains('Like').click();
+				cy.createBlog({
+					title: 'This is another new blog',
+					url: 'http://www.cypress.io/newblog',
+					author: 'Cypress'
+				});
+				cy.login({ username: 'notRoot', password: '54321' });
+				cy.get('.blog-element').then((blogs) => {
+					cy.wrap(blogs['0']).contains('View').click();
+					cy.wrap(blogs['0']).contains('Likes: 1');
+					cy.wrap(blogs['1']).contains('View').click();
+					cy.wrap(blogs['1']).contains('Likes: 0');
+				});
+			});
 		});
 	});
 });
