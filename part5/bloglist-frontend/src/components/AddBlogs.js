@@ -55,7 +55,9 @@ const AddBlogs = ({ handleCreateBlog }) => {
 						id="inputUrl"
 					/>
 				</div>
-				<button type="submit">Create</button>
+				<button type="submit" id="createBlogButton">
+					Create
+				</button>
 			</form>
 		</div>
 	);

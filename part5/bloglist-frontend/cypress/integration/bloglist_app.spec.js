@@ -35,4 +35,21 @@ describe('Blog app', () => {
 			cy.get('.error').should('have.css', 'color', 'rgb(255, 0, 0)');
 		});
 	});
+
+	describe('When logged in', () => {
+		beforeEach(() => {
+			cy.login({ username: 'root', password: '12345' });
+		});
+
+		it('A blog can be created', () => {
+			cy.contains('Create new blog').click();
+			cy.get('#inputTitle').type('This is a new blog');
+			cy.get('#inputAuthor').type('Cypress');
+			cy.get('#inputUrl').type('http://www.cypres.io');
+			cy.get('#createBlogButton').click();
+			cy.contains('This is a new blog by Cypress');
+			cy.get('.info').should('have.css', 'color', 'rgb(0, 128, 0)');
+			cy.contains('Blog created.');
+		});
+	});
 });
