@@ -4,10 +4,16 @@ const baseUrlFront = 'http://localhost:3000';
 describe('Blog app', () => {
 	beforeEach(() => {
 		cy.request('POST', `${baseUrlBack}/api/testing/reset`);
-		const user = {
+		let user = {
 			name: 'Root User',
 			username: 'root',
 			password: '12345'
+		};
+		cy.request('POST', `${baseUrlBack}/api/users`, user);
+		user = {
+			name: 'Not root',
+			username: 'notRoot',
+			password: '54321'
 		};
 		cy.request('POST', `${baseUrlBack}/api/users`, user);
 		cy.visit(baseUrlFront);
@@ -61,10 +67,24 @@ describe('Blog app', () => {
 				});
 			});
 
-			it.only('A user can like a blog', () => {
+			it('A user can like a blog', () => {
 				cy.contains('View').click();
 				cy.contains('Likes').contains('Like').click();
 				cy.contains('Likes: 1');
+			});
+
+			it('A user can delete a blog', () => {
+				cy.contains('View').click();
+				cy.get('.remove-blog-button').click();
+				cy.get('.blog-element').should('not.exist');
+				cy.get('.info').should('have.css', 'color', 'rgb(0, 128, 0)');
+				cy.contains('Blog deleted');
+			});
+
+			it('A user cannot delete a blog if it dit not create it', () => {
+				cy.login({ username: 'notRoot', password: '54321' });
+				cy.contains('View').click();
+				cy.get('.remove-blog-button').should('not.exist');
 			});
 		});
 	});

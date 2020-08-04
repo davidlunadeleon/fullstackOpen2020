@@ -24,7 +24,10 @@ const Blog = ({ blog, handleLikes, username, handleDelete }) => {
 		if (blog.user.username === username) {
 			return (
 				<div>
-					<button onClick={() => handleDelete(blog.id)}>
+					<button
+						onClick={() => handleDelete(blog.id)}
+						className="remove-blog-button"
+					>
 						Remove
 					</button>
 				</div>
