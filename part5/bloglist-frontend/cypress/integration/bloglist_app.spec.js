@@ -51,5 +51,21 @@ describe('Blog app', () => {
 			cy.get('.info').should('have.css', 'color', 'rgb(0, 128, 0)');
 			cy.contains('Blog created.');
 		});
+
+		describe('Modifying blogs', () => {
+			beforeEach(() => {
+				cy.createBlog({
+					title: 'This is a new blog',
+					url: 'http://www.cypress.io',
+					author: 'Cypress'
+				});
+			});
+
+			it.only('A user can like a blog', () => {
+				cy.contains('View').click();
+				cy.contains('Likes').contains('Like').click();
+				cy.contains('Likes: 1');
+			});
+		});
 	});
 });
