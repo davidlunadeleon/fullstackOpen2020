@@ -31,7 +31,9 @@ const reducer = (state = initialState, action) => {
 				...anecdoteToModify,
 				votes: anecdoteToModify.votes + 1
 			};
-			return state.map((a) => (a.id === id ? changedAnecdote : a));
+			return state
+				.map((a) => (a.id === id ? changedAnecdote : a))
+				.sort((a, b) => b.votes - a.votes);
 		case 'CREATE_ANECDOTE':
 			const newAnecdote = {
 				content: action.data.content,
@@ -42,7 +44,6 @@ const reducer = (state = initialState, action) => {
 		default:
 			break;
 	}
-
 	return state;
 };
 
