@@ -1,0 +1,13 @@
+.anecdoteDiv {
+	margin: 1em;
+}
+
+.voteButton {
+	display: inline-block;
+	margin-left: 1em;
+}
+
+.anecodeContent {
+	font-size: large;
+	text-decoration: underline;
+}

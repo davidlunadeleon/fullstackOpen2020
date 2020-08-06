@@ -5,12 +5,13 @@ import { addVote } from './reducers/anecdoteReducer';
 
 import NewAnecdote from './components/NewAnecdote';
 
+import './App.css';
+
 const App = () => {
 	const anecdotes = useSelector((state) => state);
 	const dispatch = useDispatch();
 
 	const vote = (id) => {
-		console.log('vote', id);
 		dispatch(addVote(id));
 	};
 
@@ -18,11 +19,16 @@ const App = () => {
 		<div>
 			<h2>Anecdotes</h2>
 			{anecdotes.map((anecdote) => (
-				<div key={anecdote.id}>
-					<div>{anecdote.content}</div>
+				<div key={anecdote.id} className="anecdoteDiv">
+					<div className="anecodeContent">{anecdote.content}</div>
 					<div>
 						has {anecdote.votes}
-						<button onClick={() => vote(anecdote.id)}>vote</button>
+						<button
+							onClick={() => vote(anecdote.id)}
+							className="voteButton"
+						>
+							vote
+						</button>
 					</div>
 				</div>
 			))}
