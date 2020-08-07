@@ -24,6 +24,7 @@ const Anecdote = ({ anecdote, handleVote }) => {
 const AnecdoteList = () => {
 	const dispatch = useDispatch();
 	const anecdotes = useSelector((state) => state.anecdotes);
+	const filter = useSelector((state) => state.filters);
 
 	const handleVote = (anecdote) => {
 		dispatch(addVote(anecdote.id));
@@ -35,13 +36,17 @@ const AnecdoteList = () => {
 
 	return (
 		<div>
-			{anecdotes.map((anecdote) => (
-				<Anecdote
-					key={anecdote.id}
-					anecdote={anecdote}
-					handleVote={() => handleVote(anecdote)}
-				/>
-			))}
+			{anecdotes
+				.filter((a) =>
+					a.content.toUpperCase().includes(filter.toUpperCase())
+				)
+				.map((anecdote) => (
+					<Anecdote
+						key={anecdote.id}
+						anecdote={anecdote}
+						handleVote={() => handleVote(anecdote)}
+					/>
+				))}
 		</div>
 	);
 };
