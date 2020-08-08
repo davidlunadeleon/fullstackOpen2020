@@ -8,15 +8,13 @@ import Filter from './components/Filter';
 
 import { initialAnecdotes } from './reducers/anecdoteReducer';
 
-import anecdotesService from './services/anecdotesService';
-
 import './App.css';
 
 const App = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		anecdotesService.getAll().then((a) => dispatch(initialAnecdotes(a)));
+		dispatch(initialAnecdotes());
 	}, [dispatch]);
 
 	return (
