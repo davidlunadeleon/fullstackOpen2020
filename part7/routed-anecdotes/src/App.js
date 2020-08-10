@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { Switch, Route, Link, useRouteMatch, Redirect } from 'react-router-dom';
+
+import Anecdote from './components/Anecdote';
 
 const Menu = () => {
 	const padding = {
@@ -25,7 +27,11 @@ const AnecdoteList = ({ anecdotes }) => (
 		<h2>Anecdotes</h2>
 		<ul>
 			{anecdotes.map((anecdote) => (
-				<li key={anecdote.id}>{anecdote.content}</li>
+				<li key={anecdote.id}>
+					<Link to={`/anecdotes/${anecdote.id}`}>
+						{anecdote.content}
+					</Link>
+				</li>
 			))}
 		</ul>
 	</div>
@@ -156,8 +162,11 @@ const App = () => {
 		setAnecdotes(anecdotes.map((a) => (a.id === id ? voted : a)));
 	};
 
+	const match = useRouteMatch('/anecdotes/:id');
+	const anecdote = match ? anecdoteById(match.params.id) : null;
+
 	return (
-		<Router>
+		<div>
 			<h1>Software anecdotes</h1>
 			<Menu />
 			<Switch>
@@ -167,12 +176,19 @@ const App = () => {
 				<Route path="/create">
 					<CreateNew addNew={addNew} />
 				</Route>
+				<Route path="/anecdotes/:id">
+					{anecdote ? (
+						<Anecdote anecdote={anecdote} />
+					) : (
+						<Redirect to="/" />
+					)}
+				</Route>
 				<Route path="/">
 					<AnecdoteList anecdotes={anecdotes} />
 				</Route>
 			</Switch>
 			<Footer />
-		</Router>
+		</div>
 	);
 };
 
