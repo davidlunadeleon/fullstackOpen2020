@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { Switch, Route, Link, useRouteMatch, Redirect } from 'react-router-dom';
+import {
+	Switch,
+	Route,
+	Link,
+	useRouteMatch,
+	Redirect,
+	useHistory
+} from 'react-router-dom';
 
 import Anecdote from './components/Anecdote';
 
@@ -74,19 +81,23 @@ const Footer = () => (
 	</div>
 );
 
-const CreateNew = (props) => {
+const CreateNew = ({ handleNotification, addNew }) => {
+	const history = useHistory();
+
 	const [content, setContent] = useState('');
 	const [author, setAuthor] = useState('');
 	const [info, setInfo] = useState('');
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		props.addNew({
+		addNew({
 			content,
 			author,
 			info,
 			votes: 0
 		});
+		history.push('/');
+		handleNotification(`A new anecdote ${content} has been created.`);
 	};
 
 	return (
@@ -165,16 +176,35 @@ const App = () => {
 	const match = useRouteMatch('/anecdotes/:id');
 	const anecdote = match ? anecdoteById(match.params.id) : null;
 
+	const [timeoutID, setTimeOutID] = useState('');
+
+	const handleNotification = (text) => {
+		if (timeoutID) {
+			clearTimeout(timeoutID);
+			setTimeOutID('');
+		}
+		setNotification(text);
+		const timeoutIDTemp = setTimeout(() => {
+			setNotification('');
+			setTimeOutID('');
+		}, 10000);
+		setTimeOutID(timeoutIDTemp);
+	};
+
 	return (
 		<div>
 			<h1>Software anecdotes</h1>
 			<Menu />
+			<div>{notification}</div>
 			<Switch>
 				<Route path="/about">
 					<About />
 				</Route>
 				<Route path="/create">
-					<CreateNew addNew={addNew} />
+					<CreateNew
+						addNew={addNew}
+						handleNotification={handleNotification}
+					/>
 				</Route>
 				<Route path="/anecdotes/:id">
 					{anecdote ? (
