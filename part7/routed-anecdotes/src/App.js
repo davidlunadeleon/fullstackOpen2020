@@ -102,6 +102,12 @@ const CreateNew = ({ handleNotification, addNew }) => {
 		handleNotification(`A new anecdote ${content} has been created.`);
 	};
 
+	const handleClear = () => {
+		content.reset();
+		author.reset();
+		info.reset();
+	};
+
 	return (
 		<div>
 			<h2>create a new anecdote</h2>
@@ -118,7 +124,10 @@ const CreateNew = ({ handleNotification, addNew }) => {
 					url for more info
 					<input {...info} />
 				</div>
-				<button>create</button>
+				<button type="submit">create</button>
+				<button onClick={handleClear} type="button">
+					reset
+				</button>
 			</form>
 		</div>
 	);
