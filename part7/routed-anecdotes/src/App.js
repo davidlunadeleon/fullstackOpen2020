@@ -108,21 +108,26 @@ const CreateNew = ({ handleNotification, addNew }) => {
 		info.reset();
 	};
 
+	const modifyInput = (obj) => {
+		let { reset, ...x } = obj;
+		return x;
+	};
+
 	return (
 		<div>
 			<h2>create a new anecdote</h2>
 			<form onSubmit={handleSubmit}>
 				<div>
 					content
-					<input {...content} />
+					<input {...modifyInput(content)} />
 				</div>
 				<div>
 					author
-					<input {...author} />
+					<input {...modifyInput(author)} />
 				</div>
 				<div>
 					url for more info
-					<input {...info} />
+					<input {...modifyInput(info)} />
 				</div>
 				<button type="submit">create</button>
 				<button onClick={handleClear} type="button">
