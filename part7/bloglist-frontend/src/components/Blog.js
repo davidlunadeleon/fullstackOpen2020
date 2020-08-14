@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Togglable from './Togglable';
+import { useDispatch } from 'react-redux';
 
-const Blog = ({ blog, handleLikes, username, handleDelete }) => {
+import Togglable from './Togglable';
+import { deleteBlog } from '../reducers/blogsReducer';
+
+const Blog = ({ blog, handleLikes, username, showNotification }) => {
+	const dispatch = useDispatch();
+
 	const [likes, setLikes] = useState(blog.likes);
 	const [likeOrDislike, setLikeOrDislike] = useState(true);
 
@@ -18,6 +23,22 @@ const Blog = ({ blog, handleLikes, username, handleDelete }) => {
 	const updateLikeState = (likes) => {
 		likeOrDislike ? setLikes(likes) : setLikes(likes);
 		setLikeOrDislike(!likeOrDislike);
+	};
+
+	const handleDelete = async (blogId) => {
+		if (blog.user.username === username) {
+			const check = window.confirm(
+				`Do you want to delete ${blog.title} by ${blog.author}?`
+			);
+			if (check) {
+				try {
+					dispatch(deleteBlog(blogId));
+					showNotification('info', 'Blog deleted');
+				} catch (exception) {
+					showNotification('error', 'Blog could not be deleted');
+				}
+			}
+		}
 	};
 
 	const showRemoveButton = () => {
@@ -59,7 +80,6 @@ const Blog = ({ blog, handleLikes, username, handleDelete }) => {
 
 Blog.propTypes = {
 	handleLikes: PropTypes.func.isRequired,
-	handleDelete: PropTypes.func.isRequired,
 	username: PropTypes.string.isRequired,
 	blog: PropTypes.object.isRequired
 };

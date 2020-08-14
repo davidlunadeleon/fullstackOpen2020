@@ -5,7 +5,9 @@ const blogsReducer = (state = [], action) => {
 		case 'ADD_BLOG':
 			return state.concat(action.data);
 		case 'DELETE_BLOG':
-			break;
+			return state
+				.filter((b) => b.id !== action.data.id)
+				.sort((a, b) => b.likes - a.likes);
 		case 'INIT_BLOGS':
 			return action.data.sort((a, b) => b.likes - a.likes);
 		default:
@@ -30,6 +32,16 @@ export const initialBlogs = () => {
 		dispatch({
 			type: 'INIT_BLOGS',
 			data: blogs
+		});
+	};
+};
+
+export const deleteBlog = (id) => {
+	return async (dispatch) => {
+		await blogsService.deleteBlog(id);
+		dispatch({
+			type: 'DELETE_BLOG',
+			data: { id }
 		});
 	};
 };

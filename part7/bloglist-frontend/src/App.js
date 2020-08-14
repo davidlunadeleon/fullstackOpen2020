@@ -107,27 +107,6 @@ const App = () => {
 		}
 	};
 
-	const handleDelete = async (blogId) => {
-		const newBlogs = blogs;
-		const previousBlog = newBlogs.find((b) => b.id === blogId);
-		if (previousBlog.user.username === user.username) {
-			const check = window.confirm(
-				`Do you want to delete ${previousBlog.title} by ${previousBlog.author}?`
-			);
-			if (check) {
-				try {
-					await blogService.deleteBlog(blogId);
-					const index = newBlogs.indexOf(previousBlog);
-					newBlogs.splice(index, 1);
-					showNotification('info', 'Blog deleted');
-					setBlogss(newBlogs);
-				} catch (exception) {
-					showNotification('error', 'Blog could not be deleted');
-				}
-			}
-		}
-	};
-
 	return (
 		<div>
 			<h1>Blog List App</h1>
@@ -146,8 +125,8 @@ const App = () => {
 					</Togglable>
 					<Blogs
 						handleLikes={handleLikes}
-						handleDelete={handleDelete}
 						username={user.username}
+						showNotification={showNotification}
 					/>
 				</div>
 			)}

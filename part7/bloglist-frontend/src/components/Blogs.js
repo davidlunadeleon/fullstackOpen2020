@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 import Blog from './Blog';
 
-const Blogs = ({ handleLikes, username, handleDelete }) => {
+const Blogs = ({ handleLikes, username, showNotification }) => {
 	const blogs = useSelector((state) => state.blogs);
 
 	return (
@@ -16,7 +16,7 @@ const Blogs = ({ handleLikes, username, handleDelete }) => {
 						blog={blog}
 						handleLikes={handleLikes}
 						username={username}
-						handleDelete={handleDelete}
+						showNotification={showNotification}
 					/>
 				</div>
 			))}
@@ -26,8 +26,7 @@ const Blogs = ({ handleLikes, username, handleDelete }) => {
 
 Blogs.propTypes = {
 	handleLikes: PropTypes.func.isRequired,
-	username: PropTypes.string.isRequired,
-	handleDelete: PropTypes.func.isRequired
+	username: PropTypes.string.isRequired
 };
 
 export default Blogs;
