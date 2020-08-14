@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { addBlog } from '../reducers/blogsReducer';
@@ -6,25 +6,19 @@ import { addBlog } from '../reducers/blogsReducer';
 const AddBlogs = ({ handleCreateBlog }) => {
 	const dispatch = useDispatch();
 
-	const [title, setTitle] = useState('');
-	const [url, setUrl] = useState('');
-	const [author, setAuthor] = useState('');
-
 	const createBlog = (event) => {
 		event.preventDefault();
 
+		const values = event.target;
+
 		dispatch(
 			addBlog({
-				title: title,
-				url: url,
-				author: author
+				title: values.inputTitle.value,
+				url: values.inputAuthor.value,
+				author: values.inputUrl.value
 			})
 		);
 		handleCreateBlog();
-
-		setTitle('');
-		setAuthor('');
-		setUrl('');
 	};
 
 	return (
@@ -33,36 +27,14 @@ const AddBlogs = ({ handleCreateBlog }) => {
 			<form onSubmit={createBlog}>
 				<div className="form-input">
 					Title:{' '}
-					<input
-						type="text"
-						value={title}
-						onChange={({ target }) => {
-							setTitle(target.value);
-						}}
-						id="inputTitle"
-					/>
+					<input type="text" id="inputTitle" name="inputTitle" />
 				</div>
 				<div className="form-input">
 					Author:{' '}
-					<input
-						type="text"
-						value={author}
-						onChange={({ target }) => {
-							setAuthor(target.value);
-						}}
-						id="inputAuthor"
-					/>
+					<input type="text" id="inputAuthor" name="inputAuthor" />
 				</div>
 				<div className="form-input">
-					Url:{' '}
-					<input
-						type="text"
-						value={url}
-						onChange={({ target }) => {
-							setUrl(target.value);
-						}}
-						id="inputUrl"
-					/>
+					Url: <input type="text" id="inputUrl" name="inputUrl" />
 				</div>
 				<button type="submit" id="createBlogButton">
 					Create
