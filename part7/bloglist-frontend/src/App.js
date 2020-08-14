@@ -55,14 +55,9 @@ const App = () => {
 		}
 	};
 
-	const handleCreateBlog = async (blogObject) => {
+	const handleCreateBlog = () => {
 		try {
 			blogFormRef.current.toggleVisibility();
-			const newBlog = await blogService.postBlog(blogObject);
-			newBlog.user = {};
-			newBlog.user.name = user.name;
-			newBlog.user.username = user.username;
-			setBlogss(blogs.concat(newBlog));
 			showNotification('info', 'Blog created.');
 		} catch (exception) {
 			showNotification('error', 'Cannot create blog. Try again.');

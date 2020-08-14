@@ -1,18 +1,27 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { addBlog } from '../reducers/blogsReducer';
 
 const AddBlogs = ({ handleCreateBlog }) => {
+	const dispatch = useDispatch();
+
 	const [title, setTitle] = useState('');
 	const [url, setUrl] = useState('');
 	const [author, setAuthor] = useState('');
 
 	const createBlog = (event) => {
 		event.preventDefault();
-		handleCreateBlog({
-			title: title,
-			url: url,
-			author: author
-		});
+
+		dispatch(
+			addBlog({
+				title: title,
+				url: url,
+				author: author
+			})
+		);
+		handleCreateBlog();
+
 		setTitle('');
 		setAuthor('');
 		setUrl('');
