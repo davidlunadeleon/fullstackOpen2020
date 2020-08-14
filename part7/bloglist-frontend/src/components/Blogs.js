@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 import Blog from './Blog';
 
-const Blogs = ({ blogs, handleLikes, username, handleDelete }) => {
-	blogs.sort((b1, b2) => b2.likes - b1.likes);
+const Blogs = ({ handleLikes, username, handleDelete }) => {
+	const blogs = useSelector((state) => state.blogs);
 
 	return (
 		<div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 
 import Blogs from './components/Blogs';
 import Login from './components/Login';
@@ -11,7 +12,11 @@ import loginService from './services/login';
 
 import './App.css';
 
+import { initialBlogs } from './reducers/blogsReducer';
+
 const App = () => {
+	const dispatch = useDispatch();
+
 	const [blogs, setBlogss] = useState([]);
 	const [user, setUser] = useState(null);
 	const [notification, setNotification] = useState(null);
@@ -19,12 +24,8 @@ const App = () => {
 	const blogFormRef = useRef();
 
 	useEffect(() => {
-		async function fetchBlogs() {
-			const blogs = await blogService.getAll();
-			setBlogss(blogs);
-		}
-		fetchBlogs();
-	}, []);
+		dispatch(initialBlogs());
+	}, [dispatch]);
 
 	useEffect(() => {
 		const loggedBlogUser = window.localStorage.getItem('loggedBlogUser');
@@ -149,7 +150,6 @@ const App = () => {
 						<AddBlogs handleCreateBlog={handleCreateBlog} />
 					</Togglable>
 					<Blogs
-						blogs={blogs}
 						handleLikes={handleLikes}
 						handleDelete={handleDelete}
 						username={user.username}
