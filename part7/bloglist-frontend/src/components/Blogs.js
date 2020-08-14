@@ -25,7 +25,6 @@ const Blogs = ({ handleLikes, username, handleDelete }) => {
 };
 
 Blogs.propTypes = {
-	blogs: PropTypes.array.isRequired,
 	handleLikes: PropTypes.func.isRequired,
 	username: PropTypes.string.isRequired,
 	handleDelete: PropTypes.func.isRequired
