@@ -7,7 +7,7 @@ const blogsReducer = (state = [], action) => {
 		case 'DELETE_BLOG':
 			break;
 		case 'INIT_BLOGS':
-			break;
+			return action.data.sort((a, b) => b.likes - a.likes);
 		default:
 			break;
 	}
@@ -19,7 +19,17 @@ export const addBlog = (blog) => {
 		const newBlog = await blogsService.postBlog(blog);
 		dispatch({
 			type: 'ADD_BLOG',
-			data: { newBlog }
+			data: newBlog
+		});
+	};
+};
+
+export const initialBlogs = () => {
+	return async (dispatch) => {
+		const blogs = await blogsService.getAll();
+		dispatch({
+			type: 'INIT_BLOGS',
+			data: blogs
 		});
 	};
 };
