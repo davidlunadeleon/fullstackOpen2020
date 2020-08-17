@@ -1,28 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 
 import Togglable from './Togglable';
-import { deleteBlog } from '../reducers/blogsReducer';
+import { deleteBlog, likeBlog } from '../reducers/blogsReducer';
 
-const Blog = ({ blog, handleLikes, username, showNotification }) => {
+const Blog = ({ blog, username, showNotification }) => {
 	const dispatch = useDispatch();
 
-	const [likes, setLikes] = useState(blog.likes);
-	const [likeOrDislike, setLikeOrDislike] = useState(true);
-
 	const updateLikes = () => {
-		const newLikes = likeOrDislike ? likes + 1 : likes - 1;
-		updateLikeState(newLikes);
-		handleLikes({
-			id: blog.id,
-			likes: newLikes
-		});
-	};
-
-	const updateLikeState = (likes) => {
-		likeOrDislike ? setLikes(likes) : setLikes(likes);
-		setLikeOrDislike(!likeOrDislike);
+		dispatch(likeBlog(blog.id));
 	};
 
 	const handleDelete = async (blogId) => {
@@ -65,9 +52,9 @@ const Blog = ({ blog, handleLikes, username, showNotification }) => {
 					Url: <a href={blog.url}>{blog.url}</a>
 				</p>
 				<p>
-					Likes: {likes}
+					Likes: {blog.likes}
 					<button className="like-button" onClick={updateLikes}>
-						{likeOrDislike ? 'Like' : 'Dislike'}
+						Like
 					</button>
 				</p>
 				<p>User: {blog.user.name}</p>

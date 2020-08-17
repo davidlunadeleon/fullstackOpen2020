@@ -79,6 +79,13 @@ blogRouter
 		} else {
 			res.status(404).end();
 		}
+	})
+	.get(async (req, res) => {
+		const blog = await Blog.findById(req.params.id).populate('user', {
+			name: 1,
+			username: 1
+		});
+		res.json(blog);
 	});
 
 module.exports = blogRouter;

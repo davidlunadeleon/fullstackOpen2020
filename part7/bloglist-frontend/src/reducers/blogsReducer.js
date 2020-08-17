@@ -10,6 +10,12 @@ const blogsReducer = (state = [], action) => {
 				.sort((a, b) => b.likes - a.likes);
 		case 'INIT_BLOGS':
 			return action.data.sort((a, b) => b.likes - a.likes);
+		case 'LIKE_BLOG':
+			return state
+				.map((b) =>
+					b.id === action.data.id ? { ...b, likes: b.likes + 1 } : b
+				)
+				.sort((a, b) => b.likes - a.likes);
 		default:
 			break;
 	}
@@ -43,6 +49,24 @@ export const deleteBlog = (id) => {
 			type: 'DELETE_BLOG',
 			data: { id }
 		});
+	};
+};
+
+export const likeBlog = (id) => {
+	return async (dispatch) => {
+		dispatch({
+			type: 'LIKE_BLOG',
+			data: { id }
+		});
+		const blog = await blogsService.getBlog(id);
+		await blogsService.putBlog(
+			{
+				...blog,
+				likes: blog.likes + 1,
+				user: blog.user.id
+			},
+			blog.id
+		);
 	};
 };
 
