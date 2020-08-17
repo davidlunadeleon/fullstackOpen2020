@@ -9,7 +9,12 @@ const Blog = ({ blog, username, showNotification }) => {
 	const dispatch = useDispatch();
 
 	const updateLikes = () => {
-		dispatch(likeBlog(blog.id));
+		try {
+			dispatch(likeBlog(blog.id));
+			showNotification('info', 'Blog liked');
+		} catch (exception) {
+			showNotification('error', 'Blog could not be updated');
+		}
 	};
 
 	const handleDelete = async (blogId) => {
@@ -66,9 +71,9 @@ const Blog = ({ blog, username, showNotification }) => {
 };
 
 Blog.propTypes = {
-	handleLikes: PropTypes.func.isRequired,
 	username: PropTypes.string.isRequired,
-	blog: PropTypes.object.isRequired
+	blog: PropTypes.object.isRequired,
+	showNotification: PropTypes.func.isRequired
 };
 
 export default Blog;

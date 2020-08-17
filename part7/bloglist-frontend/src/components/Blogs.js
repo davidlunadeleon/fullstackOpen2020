@@ -25,8 +25,8 @@ const Blogs = ({ handleLikes, username, showNotification }) => {
 };
 
 Blogs.propTypes = {
-	handleLikes: PropTypes.func.isRequired,
-	username: PropTypes.string.isRequired
+	username: PropTypes.string.isRequired,
+	showNotification: PropTypes.func.isRequired
 };
 
 export default Blogs;
