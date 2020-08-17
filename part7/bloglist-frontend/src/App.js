@@ -18,7 +18,6 @@ const App = () => {
 	const dispatch = useDispatch();
 
 	const [user, setUser] = useState(null);
-	const [notification, setNotification] = useState(null);
 
 	const blogFormRef = useRef();
 
@@ -48,42 +47,31 @@ const App = () => {
 			});
 			window.localStorage.setItem('loggedBlogUser', JSON.stringify(user));
 			setUser(user);
-			showNotification('info', 'Log in successful');
+			//	showNotification('info', 'Log in successful');
 		} catch (exception) {
-			showNotification('error', 'Invalid credentials');
+			//	showNotification('error', 'Invalid credentials');
 		}
 	};
 
 	const handleCreateBlog = () => {
 		try {
 			blogFormRef.current.toggleVisibility();
-			showNotification('info', 'Blog created.');
+			//	showNotification('info', 'Blog created.');
 		} catch (exception) {
-			showNotification('error', 'Cannot create blog. Try again.');
+			//	showNotification('error', 'Cannot create blog. Try again.');
 		}
-	};
-
-	const showNotification = (type, text) => {
-		const toShow = {
-			text: text,
-			type: type
-		};
-		setNotification(toShow);
-		setTimeout(() => {
-			setNotification(null);
-		}, 3000);
 	};
 
 	const logout = () => {
 		window.localStorage.removeItem('loggedBlogUser');
-		showNotification('info', 'Logged out.');
+		//	showNotification('info', 'Logged out.');
 		setUser(null);
 	};
 
 	return (
 		<div>
 			<h1>Blog List App</h1>
-			<Notification notification={notification} />
+			<Notification />
 			{user === null ? (
 				<Login handleLogin={handleLogin} />
 			) : (
@@ -96,10 +84,7 @@ const App = () => {
 					>
 						<AddBlogs handleCreateBlog={handleCreateBlog} />
 					</Togglable>
-					<Blogs
-						username={user.username}
-						showNotification={showNotification}
-					/>
+					<Blogs username={user.username} />
 				</div>
 			)}
 		</div>

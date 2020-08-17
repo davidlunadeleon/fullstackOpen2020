@@ -4,16 +4,17 @@ import { useDispatch } from 'react-redux';
 
 import Togglable from './Togglable';
 import { deleteBlog, likeBlog } from '../reducers/blogsReducer';
+import { setNotification } from '../reducers/notificationReducer';
 
-const Blog = ({ blog, username, showNotification }) => {
+const Blog = ({ blog, username }) => {
 	const dispatch = useDispatch();
 
 	const updateLikes = () => {
 		try {
 			dispatch(likeBlog(blog.id));
-			showNotification('info', 'Blog liked');
+			dispatch(setNotification('info', 'Blog liked'));
 		} catch (exception) {
-			showNotification('error', 'Blog could not be updated');
+			dispatch(setNotification('error', 'Blog could not be updated'));
 		}
 	};
 
@@ -25,9 +26,11 @@ const Blog = ({ blog, username, showNotification }) => {
 			if (check) {
 				try {
 					dispatch(deleteBlog(blogId));
-					showNotification('info', 'Blog deleted');
+					dispatch(setNotification('info', 'Blog deleted'));
 				} catch (exception) {
-					showNotification('error', 'Blog could not be deleted');
+					dispatch(
+						setNotification('error', 'Blog could not be deleted')
+					);
 				}
 			}
 		}
@@ -72,8 +75,7 @@ const Blog = ({ blog, username, showNotification }) => {
 
 Blog.propTypes = {
 	username: PropTypes.string.isRequired,
-	blog: PropTypes.object.isRequired,
-	showNotification: PropTypes.func.isRequired
+	blog: PropTypes.object.isRequired
 };
 
 export default Blog;
