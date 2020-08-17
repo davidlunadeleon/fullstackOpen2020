@@ -14,8 +14,8 @@ const AddBlogs = ({ handleCreateBlog }) => {
 		dispatch(
 			addBlog({
 				title: values.inputTitle.value,
-				url: values.inputAuthor.value,
-				author: values.inputUrl.value
+				url: values.inputUrl.value,
+				author: values.inputAuthor.value
 			})
 		);
 		handleCreateBlog();
