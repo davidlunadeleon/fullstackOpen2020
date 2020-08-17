@@ -18,14 +18,14 @@ const Blog = ({ blog, username }) => {
 		}
 	};
 
-	const handleDelete = async (blogId) => {
+	const handleDelete = async () => {
 		if (blog.user.username === username) {
 			const check = window.confirm(
 				`Do you want to delete ${blog.title} by ${blog.author}?`
 			);
 			if (check) {
 				try {
-					dispatch(deleteBlog(blogId));
+					dispatch(deleteBlog(blog.id));
 					dispatch(setNotification('info', 'Blog deleted'));
 				} catch (exception) {
 					dispatch(
@@ -39,14 +39,9 @@ const Blog = ({ blog, username }) => {
 	const showRemoveButton = () => {
 		if (blog.user.username === username) {
 			return (
-				<div>
-					<button
-						onClick={() => handleDelete(blog.id)}
-						className="remove-blog-button"
-					>
-						Remove
-					</button>
-				</div>
+				<button onClick={handleDelete} className="remove-blog-button">
+					Remove
+				</button>
 			);
 		}
 		return <div></div>;

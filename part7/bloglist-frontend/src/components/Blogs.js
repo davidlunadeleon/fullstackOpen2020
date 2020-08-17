@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 import Blog from './Blog';
 
-const Blogs = ({ handleLikes, username }) => {
+const Blogs = ({ username }) => {
 	const blogs = useSelector((state) => state.blogs);
 
 	return (
@@ -12,11 +12,7 @@ const Blogs = ({ handleLikes, username }) => {
 			<h2>Blogs</h2>
 			{blogs.map((blog) => (
 				<div key={blog.id} className="blog-style">
-					<Blog
-						blog={blog}
-						handleLikes={handleLikes}
-						username={username}
-					/>
+					<Blog blog={blog} username={username} />
 				</div>
 			))}
 		</div>
