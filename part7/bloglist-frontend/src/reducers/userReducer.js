@@ -20,7 +20,7 @@ export const loginUser = (username, password) => {
 		blogsService.setToken(user.token);
 		dispatch({
 			type: 'LOGIN',
-			data: { user }
+			data: user
 		});
 	};
 };
@@ -38,10 +38,11 @@ export const loginPreviousSession = () => {
 	return async (dispatch) => {
 		const loggedBlogUser = window.localStorage.getItem('loggedBlogUser');
 		if (loggedBlogUser) {
-			const savedUser = JSON.parse(loggedBlogUser);
+			const user = JSON.parse(loggedBlogUser);
+			blogsService.setToken(user.token);
 			dispatch({
 				type: 'LOGIN',
-				data: { savedUser }
+				data: user
 			});
 		} else {
 			dispatch({ type: 'LOGOUT' });
