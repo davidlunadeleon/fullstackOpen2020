@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Togglable from './Togglable';
 import { deleteBlog, likeBlog } from '../reducers/blogsReducer';
 import { setNotification } from '../reducers/notificationReducer';
 
-const Blog = ({ blog, username }) => {
+const Blog = ({ blog }) => {
+	const user = useSelector((state) => state.user);
 	const dispatch = useDispatch();
 
 	const updateLikes = () => {
@@ -19,7 +20,10 @@ const Blog = ({ blog, username }) => {
 	};
 
 	const handleDelete = async () => {
-		if (blog.user.username === username) {
+		if (
+			typeof user.username !== 'undefined' &&
+			blog.user.username === user.username
+		) {
 			const check = window.confirm(
 				`Do you want to delete ${blog.title} by ${blog.author}?`
 			);
@@ -37,7 +41,10 @@ const Blog = ({ blog, username }) => {
 	};
 
 	const showRemoveButton = () => {
-		if (blog.user.username === username) {
+		if (
+			typeof user.username !== 'undefined' &&
+			blog.user.username === user.username
+		) {
 			return (
 				<button onClick={handleDelete} className="remove-blog-button">
 					Remove
@@ -69,7 +76,6 @@ const Blog = ({ blog, username }) => {
 };
 
 Blog.propTypes = {
-	username: PropTypes.string.isRequired,
 	blog: PropTypes.object.isRequired
 };
 

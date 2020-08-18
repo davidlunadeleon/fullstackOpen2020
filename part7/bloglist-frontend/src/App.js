@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Blogs from './components/Blogs';
 import Login from './components/Login';
@@ -7,65 +7,35 @@ import Notification from './components/Notification';
 import AddBlogs from './components/AddBlogs';
 import Togglable from './components/Togglable';
 
-import blogService from './services/blogs';
-import loginService from './services/login';
-
 import './App.css';
 
 import { initialBlogs } from './reducers/blogsReducer';
+import { loginPreviousSession, logoutUser } from './reducers/userReducer';
+import { setNotification } from './reducers/notificationReducer';
 
 const App = () => {
+	const user = useSelector((state) => state.user);
 	const dispatch = useDispatch();
-
-	const [user, setUser] = useState(null);
 
 	const blogFormRef = useRef();
 
 	useEffect(() => {
 		dispatch(initialBlogs());
+		dispatch(loginPreviousSession());
 	}, [dispatch]);
-
-	useEffect(() => {
-		const loggedBlogUser = window.localStorage.getItem('loggedBlogUser');
-		if (loggedBlogUser) {
-			const savedUser = JSON.parse(loggedBlogUser);
-			setUser(savedUser);
-		}
-	}, []);
-
-	useEffect(() => {
-		if (user) {
-			blogService.setToken(user.token);
-		}
-	}, [user]);
-
-	const handleLogin = async (username, password) => {
-		try {
-			const user = await loginService.login({
-				username,
-				password
-			});
-			window.localStorage.setItem('loggedBlogUser', JSON.stringify(user));
-			setUser(user);
-			//	showNotification('info', 'Log in successful');
-		} catch (exception) {
-			//	showNotification('error', 'Invalid credentials');
-		}
-	};
 
 	const handleCreateBlog = () => {
 		try {
 			blogFormRef.current.toggleVisibility();
-			//	showNotification('info', 'Blog created.');
+			setNotification('info', 'Blog created.');
 		} catch (exception) {
-			//	showNotification('error', 'Cannot create blog. Try again.');
+			setNotification('error', 'Cannot create blog. Try again.');
 		}
 	};
 
 	const logout = () => {
-		window.localStorage.removeItem('loggedBlogUser');
-		//	showNotification('info', 'Logged out.');
-		setUser(null);
+		dispatch(logoutUser());
+		setNotification('info', 'Logged out.');
 	};
 
 	return (
@@ -73,7 +43,7 @@ const App = () => {
 			<h1>Blog List App</h1>
 			<Notification />
 			{user === null ? (
-				<Login handleLogin={handleLogin} />
+				<Login />
 			) : (
 				<div>
 					<button onClick={logout}>Log out</button>
@@ -84,7 +54,7 @@ const App = () => {
 					>
 						<AddBlogs handleCreateBlog={handleCreateBlog} />
 					</Togglable>
-					<Blogs username={user.username} />
+					<Blogs />
 				</div>
 			)}
 		</div>
