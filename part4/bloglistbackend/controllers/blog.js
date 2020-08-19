@@ -49,8 +49,6 @@ blogRouter
 		if (!blog) {
 			return res.status(204).end();
 		}
-		console.log(user._id.toString());
-		console.log(blog.user.toString());
 		if (
 			!req.token ||
 			!decodedToken.id ||
@@ -59,6 +57,8 @@ blogRouter
 			return res.status(401).json({ error: 'Token missing or invalid.' });
 		}
 		await Blog.findByIdAndRemove(req.params.id);
+		user.blogs = user.blogs.filter((b) => b.toString() !== req.params.id);
+		await User.findByIdAndUpdate({ _id: user._id }, user);
 		return res.status(204).end();
 	})
 	.put(async (req, res) => {
