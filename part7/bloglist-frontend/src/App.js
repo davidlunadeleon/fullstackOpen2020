@@ -1,11 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
-import Blogs from './components/Blogs';
 import Login from './components/Login';
 import Notification from './components/Notification';
-import AddBlogs from './components/AddBlogs';
-import Togglable from './components/Togglable';
+import Home from './components/Home';
 
 import './App.css';
 
@@ -17,21 +16,10 @@ const App = () => {
 	const user = useSelector((state) => state.user);
 	const dispatch = useDispatch();
 
-	const blogFormRef = useRef();
-
 	useEffect(() => {
 		dispatch(initialBlogs());
 		dispatch(loginPreviousSession());
 	}, [dispatch]);
-
-	const handleCreateBlog = () => {
-		try {
-			blogFormRef.current.toggleVisibility();
-			setNotification('info', 'Blog created.');
-		} catch (exception) {
-			setNotification('error', 'Cannot create blog. Try again.');
-		}
-	};
 
 	const logout = () => {
 		dispatch(logoutUser());
@@ -47,14 +35,7 @@ const App = () => {
 			) : (
 				<div>
 					<button onClick={logout}>Log out</button>
-					<Togglable
-						showButtonLabel="Create new blog"
-						hideButtonLabel="cancel"
-						ref={blogFormRef}
-					>
-						<AddBlogs handleCreateBlog={handleCreateBlog} />
-					</Togglable>
-					<Blogs />
+					<Home />
 				</div>
 			)}
 		</div>
