@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Login from './components/Login';
 import Notification from './components/Notification';
 import Home from './components/Home';
+import Users from './components/Users';
 
 import './App.css';
 
@@ -38,6 +39,7 @@ const App = () => {
 				<div>
 					<button onClick={logout}>Log out</button>
 					<Home />
+					<Users />
 				</div>
 			)}
 		</div>
