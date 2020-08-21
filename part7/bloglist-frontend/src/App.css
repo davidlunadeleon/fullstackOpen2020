@@ -105,3 +105,8 @@ tbody {
 	text-align: center;
 	padding: 1em;
 }
+
+.navLink {
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+}
