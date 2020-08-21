@@ -24,13 +24,46 @@ export const initUserList = () => {
 	};
 };
 
-export const updateUser = (id) => {
-	return async (dispatch) => {
-		const user = await usersService.getUser(id);
-		dispatch({
-			type: 'UPDATE_USER',
-			data: { user, id }
-		});
+export const addBlogToUser = (newBlog) => {
+	return async (dispatch, getState) => {
+		const state = getState();
+		if (state.user) {
+			const savedUser = state.userList.find(
+				(u) => u.id === state.user.id
+			);
+			const user = {
+				...savedUser,
+				blogs: [
+					...savedUser.blogs,
+					{
+						title: newBlog.title,
+						author: newBlog.author,
+						url: newBlog.url,
+						id: newBlog.id
+					}
+				]
+			};
+			dispatch({
+				type: 'UPDATE_USER',
+				data: { user, id: user.id }
+			});
+		}
+	};
+};
+
+export const removeBlogFromUser = (blogId) => {
+	return async (dispatch, getState) => {
+		const state = getState();
+		if (state.user) {
+			const savedUser = state.userList.find(
+				(u) => u.id === state.user.id
+			);
+			savedUser.blogs = savedUser.blogs.filter((b) => b.id !== blogId);
+			dispatch({
+				type: 'UPDATE_USER',
+				data: { user: savedUser, id: savedUser.id }
+			});
+		}
 	};
 };
 

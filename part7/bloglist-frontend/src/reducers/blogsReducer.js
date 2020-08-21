@@ -1,5 +1,7 @@
 import blogsService from '../services/blogs';
 
+import { addBlogToUser, removeBlogFromUser } from './userListReducer';
+
 const blogsReducer = (state = [], action) => {
 	switch (action.type) {
 		case 'ADD_BLOG':
@@ -29,6 +31,7 @@ export const addBlog = (blog) => {
 			type: 'ADD_BLOG',
 			data: newBlog
 		});
+		dispatch(addBlogToUser(newBlog));
 	};
 };
 
@@ -49,6 +52,7 @@ export const deleteBlog = (id) => {
 			type: 'DELETE_BLOG',
 			data: { id }
 		});
+		dispatch(removeBlogFromUser(id));
 	};
 };
 
