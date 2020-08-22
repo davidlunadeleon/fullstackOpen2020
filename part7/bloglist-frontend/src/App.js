@@ -1,17 +1,12 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-	BrowserRouter as Router,
-	Switch,
-	Route,
-	Link,
-	Redirect
-} from 'react-router-dom';
+import { Switch, Route, Link, Redirect, useRouteMatch } from 'react-router-dom';
 
 import Login from './components/Login';
 import Notification from './components/Notification';
 import Home from './components/Home';
 import Users from './components/Users';
+import UserView from './components/UserView';
 
 import './App.css';
 
@@ -22,6 +17,7 @@ import { initUserList } from './reducers/userListReducer';
 
 const App = () => {
 	const user = useSelector((state) => state.user);
+	const userList = useSelector((state) => state.userList);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -46,8 +42,13 @@ const App = () => {
 		);
 	};
 
+	const match = useRouteMatch('/user/:id');
+	const userForView = match
+		? userList.find((u) => u.id === match.params.id)
+		: null;
+
 	return (
-		<Router>
+		<div>
 			<nav>
 				<Link className="navLink" to="/">
 					home
@@ -64,6 +65,14 @@ const App = () => {
 				)}
 			</nav>
 			<Switch>
+				<Route path="/user/:id">
+					{renderBlogMain()}
+					{user ? (
+						<UserView user={userForView} />
+					) : (
+						<Redirect to="/login" />
+					)}
+				</Route>
 				<Route path="/users">
 					{renderBlogMain()}
 					{user ? <Users /> : <Redirect to="/login" />}
@@ -76,7 +85,7 @@ const App = () => {
 					{user ? <Home /> : <Redirect to="/login" />}
 				</Route>
 			</Switch>
-		</Router>
+		</div>
 	);
 };
 
