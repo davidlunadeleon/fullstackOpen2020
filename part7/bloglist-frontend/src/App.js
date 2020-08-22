@@ -37,9 +37,7 @@ const App = () => {
 		return (
 			<div>
 				<h1>Blog List App</h1>
-				<h3>{user ? user.username : ''} logged in</h3>
 				<Notification />
-				<button onClick={logout}>Log out</button>
 			</div>
 		);
 	};
@@ -64,7 +62,10 @@ const App = () => {
 					users
 				</Link>
 				{user ? (
-					<div></div>
+					<div id="loggedIn">
+						{user ? user.username : ''} logged in
+						<button onClick={logout}>Log out</button>
+					</div>
 				) : (
 					<Link className="navLink" to="/login">
 						login

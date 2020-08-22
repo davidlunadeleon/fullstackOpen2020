@@ -111,3 +111,12 @@ tbody {
 	padding-left: 0.5em;
 	padding-right: 0.5em;
 }
+
+nav {
+	background-color: lightblue;
+}
+
+#loggedIn {
+	display: inline;
+	font-style: italic;
+}
