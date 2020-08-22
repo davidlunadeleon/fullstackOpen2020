@@ -1,15 +1,11 @@
 import React from 'react';
 
+import Blogs from './Blogs';
+
 const UserView = ({ user }) => {
 	const makeList = () => {
 		if (user.blogs.length >= 1) {
-			return (
-				<ul>
-					{user.blogs.map((b) => (
-						<li key={b.id}>{b.title}</li>
-					))}
-				</ul>
-			);
+			return <Blogs blogs={user.blogs} />;
 		} else {
 			return <p>This user does not have any posts yet.</p>;
 		}

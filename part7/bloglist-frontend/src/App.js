@@ -7,6 +7,7 @@ import Notification from './components/Notification';
 import Home from './components/Home';
 import Users from './components/Users';
 import UserView from './components/UserView';
+import Blog from './components/Blog';
 
 import './App.css';
 
@@ -17,6 +18,7 @@ import { initUserList } from './reducers/userListReducer';
 
 const App = () => {
 	const user = useSelector((state) => state.user);
+	const blogs = useSelector((state) => state.blogs);
 	const userList = useSelector((state) => state.userList);
 	const dispatch = useDispatch();
 
@@ -42,9 +44,14 @@ const App = () => {
 		);
 	};
 
-	const match = useRouteMatch('/user/:id');
-	const userForView = match
-		? userList.find((u) => u.id === match.params.id)
+	const matchUser = useRouteMatch('/user/:id');
+	const userForView = matchUser
+		? userList.find((u) => u.id === matchUser.params.id)
+		: null;
+
+	const matchBlog = useRouteMatch('/blogs/:id');
+	const blogForView = matchBlog
+		? blogs.find((b) => b.id === matchBlog.params.id)
 		: null;
 
 	return (
@@ -65,6 +72,14 @@ const App = () => {
 				)}
 			</nav>
 			<Switch>
+				<Route path="/blogs/:id">
+					{renderBlogMain()}
+					{user ? (
+						<Blog blog={blogForView} />
+					) : (
+						<Redirect to="/login" />
+					)}
+				</Route>
 				<Route path="/user/:id">
 					{renderBlogMain()}
 					{user ? (

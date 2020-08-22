@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Blogs from '../components/Blogs';
 import AddBlogs from '../components/AddBlogs';
@@ -8,6 +8,7 @@ import Togglable from '../components/Togglable';
 import { setNotification } from '../reducers/notificationReducer';
 
 const Home = () => {
+	const blogs = useSelector((state) => state.blogs);
 	const dispatch = useDispatch();
 
 	const blogFormRef = useRef();
@@ -32,7 +33,8 @@ const Home = () => {
 			>
 				<AddBlogs handleCreateBlog={handleCreateBlog} />
 			</Togglable>
-			<Blogs />
+			<h2>Blogs</h2>
+			<Blogs blogs={blogs} />
 		</div>
 	);
 };

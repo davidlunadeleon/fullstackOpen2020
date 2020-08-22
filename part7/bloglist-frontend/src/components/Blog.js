@@ -1,8 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Togglable from './Togglable';
 import { deleteBlog, likeBlog } from '../reducers/blogsReducer';
 import { setNotification } from '../reducers/notificationReducer';
 
@@ -54,29 +52,33 @@ const Blog = ({ blog }) => {
 		return <div></div>;
 	};
 
-	return (
-		<div className="blog-element">
-			{blog.title} by {blog.author}
-			<Togglable showButtonLabel="View" hideButtonLabel="Hide">
-				<p>
-					Url: <a href={blog.url}>{blog.url}</a>
-				</p>
-				<p>
-					Likes: {blog.likes}
-					<button className="like-button" onClick={updateLikes}>
-						Like
-					</button>
-				</p>
-				<p>User: {blog.user.name}</p>
-				<p>Username: {blog.user.username}</p>
-				{showRemoveButton()}
-			</Togglable>
-		</div>
-	);
-};
+	const checkBlog = () => {
+		if (blog) {
+			return (
+				<div className="blog-element">
+					<h3>
+						{blog.title} by {blog.author}
+					</h3>
+					<p>
+						Url: <a href={blog.url}>{blog.url}</a>
+					</p>
+					<p>
+						Likes: {blog.likes}
+						<button className="like-button" onClick={updateLikes}>
+							Like
+						</button>
+					</p>
+					<p>User: {blog.user.name}</p>
+					<p>Username: {blog.user.username}</p>
+					{showRemoveButton()}
+				</div>
+			);
+		} else {
+			return <div></div>;
+		}
+	};
 
-Blog.propTypes = {
-	blog: PropTypes.object.isRequired
+	return checkBlog();
 };
 
 export default Blog;
