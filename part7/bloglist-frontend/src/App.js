@@ -70,35 +70,37 @@ const App = () => {
 					</Link>
 				)}
 			</nav>
-			<Switch>
-				<Route path="/blogs/:id">
-					{renderBlogMain()}
-					{user ? (
-						<Blog blog={blogForView} />
-					) : (
-						<Redirect to="/login" />
-					)}
-				</Route>
-				<Route path="/user/:id">
-					{renderBlogMain()}
-					{user ? (
-						<UserView user={userForView} />
-					) : (
-						<Redirect to="/login" />
-					)}
-				</Route>
-				<Route path="/users">
-					{renderBlogMain()}
-					{user ? <Users /> : <Redirect to="/login" />}
-				</Route>
-				<Route path="/login">
-					{user ? <Redirect to="/" /> : <Login />}
-				</Route>
-				<Route path="/">
-					{renderBlogMain()}
-					{user ? <Home /> : <Redirect to="/login" />}
-				</Route>
-			</Switch>
+			<div className="app-body">
+				<Switch>
+					<Route path="/blogs/:id">
+						{renderBlogMain()}
+						{user ? (
+							<Blog blog={blogForView} />
+						) : (
+							<Redirect to="/login" />
+						)}
+					</Route>
+					<Route path="/user/:id">
+						{renderBlogMain()}
+						{user ? (
+							<UserView user={userForView} />
+						) : (
+							<Redirect to="/login" />
+						)}
+					</Route>
+					<Route path="/users">
+						{renderBlogMain()}
+						{user ? <Users /> : <Redirect to="/login" />}
+					</Route>
+					<Route path="/login">
+						{user ? <Redirect to="/" /> : <Login />}
+					</Route>
+					<Route path="/">
+						{renderBlogMain()}
+						{user ? <Home /> : <Redirect to="/login" />}
+					</Route>
+				</Switch>
+			</div>
 		</div>
 	);
 };

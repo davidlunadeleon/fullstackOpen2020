@@ -3,17 +3,16 @@ import { Link } from 'react-router-dom';
 
 const Blogs = ({ blogs }) => {
 	return (
-		<div>
+		<ul className="list-group">
 			{blogs.map((blog) => (
-				<Link
+				<li
 					key={blog.id}
-					className="blog-style"
-					to={`/blogs/${blog.id}`}
+					className="list-group-item list-group-item-action"
 				>
-					{blog.title}
-				</Link>
+					<Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+				</li>
 			))}
-		</div>
+		</ul>
 	);
 };
 

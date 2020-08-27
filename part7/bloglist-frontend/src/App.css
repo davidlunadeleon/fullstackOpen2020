@@ -69,13 +69,6 @@ button {
 	margin: 1em;
 }
 
-.blog-style {
-	border: 1px solid black;
-	margin: 1em;
-	padding: 1em;
-	display: block;
-}
-
 .like-button {
 	display: inline-block;
 	margin: auto;
@@ -106,4 +99,9 @@ nav {
 #loggedIn {
 	display: inline;
 	font-style: italic;
+}
+
+.app-body {
+	width: 90%;
+	margin: auto;
 }
