@@ -52,22 +52,45 @@ const App = () => {
 
 	return (
 		<div>
-			<nav>
-				<Link className="navLink" to="/">
-					home
-				</Link>
-				<Link className="navLink" to="/users">
-					users
-				</Link>
+			<nav className="navbar navbar-expand-lg bg-light">
+				<ul className="navbar-nav mr-auto">
+					<li className="nav-item active">
+						<Link className="nav-link" to="/">
+							home
+						</Link>
+					</li>
+					<li className="nav-item">
+						<Link className="nav-link" to="/users">
+							users
+						</Link>
+					</li>
+					{user ? (
+						<div></div>
+					) : (
+						<li className="nav-item">
+							<Link className="nav-link" to="/login">
+								login
+							</Link>
+						</li>
+					)}
+				</ul>
 				{user ? (
-					<div id="loggedIn">
-						{user ? user.username : ''} logged in
-						<button onClick={logout}>Log out</button>
-					</div>
+					[
+						<span className="navbar-text">
+							{user ? user.username : ''} logged in
+						</span>,
+						<form className="form-inline">
+							<button
+								className="btn btn-outline-secondary"
+								onClick={logout}
+								type="button"
+							>
+								Log out
+							</button>
+						</form>
+					]
 				) : (
-					<Link className="navLink" to="/login">
-						login
-					</Link>
+					<div></div>
 				)}
 			</nav>
 			<div className="app-body">
