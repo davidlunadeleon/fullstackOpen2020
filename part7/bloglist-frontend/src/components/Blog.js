@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteBlog, likeBlog } from '../reducers/blogsReducer';
 import { setNotification } from '../reducers/notificationReducer';
 
+import Comments from './Comments';
+
 const Blog = ({ blog }) => {
 	const user = useSelector((state) => state.user);
 	const dispatch = useDispatch();
@@ -71,6 +73,7 @@ const Blog = ({ blog }) => {
 					<p>User: {blog.user.name}</p>
 					<p>Username: {blog.user.username}</p>
 					{showRemoveButton()}
+					<Comments blog={blog} />
 				</div>
 			);
 		} else {

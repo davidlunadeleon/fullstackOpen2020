@@ -18,6 +18,10 @@ const blogsReducer = (state = [], action) => {
 					b.id === action.data.id ? { ...b, likes: b.likes + 1 } : b
 				)
 				.sort((a, b) => b.likes - a.likes);
+		case 'ADD_COMMENT':
+			return state.map((b) =>
+				b.id === action.data.id ? action.data.newBlog : b
+			);
 		default:
 			break;
 	}
@@ -71,6 +75,16 @@ export const likeBlog = (id) => {
 			},
 			blog.id
 		);
+	};
+};
+
+export const commentBlog = (id, comment) => {
+	return async (dispatch) => {
+		const newBlog = await blogsService.commentBlog(id, { comment });
+		dispatch({
+			type: 'ADD_COMMENT',
+			data: { id, newBlog }
+		});
 	};
 };
 
