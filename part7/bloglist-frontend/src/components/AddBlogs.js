@@ -29,23 +29,15 @@ const AddBlogs = ({ handleCreateBlog }) => {
 			<Form onSubmit={createBlog}>
 				<Form.Group controlId="formTitle">
 					<Form.Label>Title: </Form.Label>
-					<Form.Control
-						type="text"
-						name="inputTitle"
-						id="inputTitle"
-					/>
+					<Form.Control type="text" name="inputTitle" />
 				</Form.Group>
 				<Form.Group controlId="formAuthor">
 					<Form.Label>Author: </Form.Label>
-					<Form.Control
-						type="text"
-						name="inputAuthor"
-						id="inputAuthor"
-					/>
+					<Form.Control type="text" name="inputAuthor" />
 				</Form.Group>
 				<Form.Group controlId="formUrl">
 					<Form.Label>Url: </Form.Label>
-					<Form.Control type="text" name="inputUrl" id="inputUrl" />
+					<Form.Control type="text" name="inputUrl" />
 				</Form.Group>
 				<Button variant="primary" type="submit" id="createBlogButton">
 					Create

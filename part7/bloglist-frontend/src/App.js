@@ -77,10 +77,13 @@ const App = () => {
 				</ul>
 				{user ? (
 					[
-						<span className="navbar-text">
+						<span className="navbar-text" key="navbar-username">
 							{user ? user.username : ''} logged in
 						</span>,
-						<form className="form-inline">
+						<form
+							className="form-inline"
+							key="navbar-logout-button"
+						>
 							<Button onClick={logout} variant="outline-primary">
 								Log out
 							</Button>
