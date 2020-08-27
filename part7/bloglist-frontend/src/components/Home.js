@@ -28,7 +28,7 @@ const Home = () => {
 		<div>
 			<Togglable
 				showButtonLabel="Create new blog"
-				hideButtonLabel="cancel"
+				hideButtonLabel="Cancel"
 				ref={blogFormRef}
 			>
 				<AddBlogs handleCreateBlog={handleCreateBlog} />
