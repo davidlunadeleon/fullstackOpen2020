@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Jumbotron } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
 
 import { deleteBlog, likeBlog } from '../reducers/blogsReducer';
 import { setNotification } from '../reducers/notificationReducer';
@@ -10,6 +11,7 @@ import Comments from './Comments';
 const Blog = ({ blog }) => {
 	const user = useSelector((state) => state.user);
 	const dispatch = useDispatch();
+	const history = useHistory();
 
 	const updateLikes = () => {
 		try {
@@ -32,6 +34,7 @@ const Blog = ({ blog }) => {
 				try {
 					dispatch(deleteBlog(blog.id));
 					dispatch(setNotification('success', 'Blog deleted'));
+					history.push('/');
 				} catch (exception) {
 					dispatch(
 						setNotification('danger', 'Blog could not be deleted')
