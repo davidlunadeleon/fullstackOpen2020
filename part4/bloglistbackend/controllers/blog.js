@@ -88,4 +88,26 @@ blogRouter
 		res.json(blog);
 	});
 
+blogRouter.route('/:id/comments').post(async (req, res) => {
+	const body = req.body;
+	const decodedToken = jwt.verify(req.token, process.env.SECRET);
+	if (!req.token || !decodedToken.id) {
+		return res.status(401).json({ error: 'Token missing or invalid.' });
+	}
+
+	const blog = await Blog.findById(req.params.id);
+	if (!blog) {
+		return res.status(404).end();
+	}
+	blog.comments = blog.comments.concat(body.comment);
+	await blog.save();
+
+	const savedBlogFormatted = await Blog.findById(blog.id).populate('user', {
+		name: 1,
+		username: 1
+	});
+
+	res.json(savedBlogFormatted);
+});
+
 module.exports = blogRouter;
