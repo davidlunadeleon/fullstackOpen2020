@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Jumbotron } from 'react-bootstrap';
+import { Jumbotron, Button } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 
 import { deleteBlog, likeBlog } from '../reducers/blogsReducer';
@@ -49,7 +49,11 @@ const Blog = ({ blog }) => {
 			typeof user.username !== 'undefined' &&
 			blog.user.username === user.username
 		) {
-			return <button onClick={handleDelete}>Remove</button>;
+			return (
+				<Button type="button" variant="danger" onClick={handleDelete}>
+					Remove
+				</Button>
+			);
 		}
 		return <div></div>;
 	};
@@ -66,7 +70,13 @@ const Blog = ({ blog }) => {
 					</p>
 					<p>
 						Likes: {blog.likes}
-						<button onClick={updateLikes}>Like</button>
+						<Button
+							type="button"
+							variant="primary"
+							onClick={updateLikes}
+						>
+							Like
+						</Button>
 					</p>
 					<p>User: {blog.user.name}</p>
 					<p>Username: {blog.user.username}</p>
