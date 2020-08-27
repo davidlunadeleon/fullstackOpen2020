@@ -16,10 +16,10 @@ const Home = () => {
 	const handleCreateBlog = () => {
 		try {
 			blogFormRef.current.toggleVisibility();
-			dispatch(setNotification('info', 'Blog created.'));
+			dispatch(setNotification('success', 'Blog created.'));
 		} catch (exception) {
 			dispatch(
-				setNotification('error', 'Cannot create blog. Try again.')
+				setNotification('danger', 'Cannot create blog. Try again.')
 			);
 		}
 	};

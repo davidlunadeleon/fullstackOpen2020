@@ -15,7 +15,7 @@ const Login = () => {
 		dispatch(
 			loginUser(values.loginUsername.value, values.loginPassword.value)
 		);
-		dispatch(setNotification('info', 'Logged in'));
+		dispatch(setNotification('success', 'Logged in'));
 		history.push('/');
 	};
 

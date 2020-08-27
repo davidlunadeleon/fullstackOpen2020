@@ -13,7 +13,6 @@ import './App.css';
 
 import { initialBlogs } from './reducers/blogsReducer';
 import { loginPreviousSession, logoutUser } from './reducers/userReducer';
-import { setNotification } from './reducers/notificationReducer';
 import { initUserList } from './reducers/userListReducer';
 
 const App = () => {
@@ -30,7 +29,6 @@ const App = () => {
 
 	const logout = () => {
 		dispatch(logoutUser());
-		setNotification('info', 'Logged out.');
 	};
 
 	const renderBlogMain = () => {

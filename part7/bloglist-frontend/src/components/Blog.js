@@ -13,9 +13,9 @@ const Blog = ({ blog }) => {
 	const updateLikes = () => {
 		try {
 			dispatch(likeBlog(blog.id));
-			dispatch(setNotification('info', 'Blog liked'));
+			dispatch(setNotification('success', 'Blog liked'));
 		} catch (exception) {
-			dispatch(setNotification('error', 'Blog could not be updated'));
+			dispatch(setNotification('danger', 'Blog could not be updated'));
 		}
 	};
 
@@ -30,10 +30,10 @@ const Blog = ({ blog }) => {
 			if (check) {
 				try {
 					dispatch(deleteBlog(blog.id));
-					dispatch(setNotification('info', 'Blog deleted'));
+					dispatch(setNotification('success', 'Blog deleted'));
 				} catch (exception) {
 					dispatch(
-						setNotification('error', 'Blog could not be deleted')
+						setNotification('danger', 'Blog could not be deleted')
 					);
 				}
 			}

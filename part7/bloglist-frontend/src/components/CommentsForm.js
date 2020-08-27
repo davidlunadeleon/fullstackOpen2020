@@ -11,7 +11,7 @@ const CommentsForm = ({ id }) => {
 		event.preventDefault();
 		const values = event.target;
 		dispatch(commentBlog(id, values.newComment.value));
-		dispatch(setNotification('info', 'Comment created'));
+		dispatch(setNotification('success', 'Comment created'));
 		values.newComment.value = '';
 	};
 

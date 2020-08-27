@@ -41,11 +41,8 @@ body {
 	font-family: Arial, Helvetica, sans-serif;
 }
 
-.error,
-.info {
-	border-radius: 5px;
+.notification {
 	border: 2px solid;
-	background-color: lightgray;
 	padding: 1%;
 	margin: auto;
 	position: absolute;
@@ -53,16 +50,6 @@ body {
 	width: 50%;
 	margin-left: -25%;
 	text-align: center;
-}
-
-.error {
-	border-color: red;
-	color: red;
-}
-
-.info {
-	border-color: green;
-	color: green;
 }
 
 .form {
