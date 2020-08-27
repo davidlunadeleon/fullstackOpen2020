@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button, Form } from 'react-bootstrap';
+
 import { useDispatch } from 'react-redux';
 import { addBlog } from '../reducers/blogsReducer';
 
@@ -24,22 +26,31 @@ const AddBlogs = ({ handleCreateBlog }) => {
 	return (
 		<div>
 			<h2>Create new blog</h2>
-			<form onSubmit={createBlog}>
-				<div className="form-input">
-					Title:{' '}
-					<input type="text" id="inputTitle" name="inputTitle" />
-				</div>
-				<div className="form-input">
-					Author:{' '}
-					<input type="text" id="inputAuthor" name="inputAuthor" />
-				</div>
-				<div className="form-input">
-					Url: <input type="text" id="inputUrl" name="inputUrl" />
-				</div>
-				<button type="submit" id="createBlogButton">
+			<Form onSubmit={createBlog}>
+				<Form.Group controlId="formTitle">
+					<Form.Label>Title: </Form.Label>
+					<Form.Control
+						type="text"
+						name="inputTitle"
+						id="inputTitle"
+					/>
+				</Form.Group>
+				<Form.Group controlId="formAuthor">
+					<Form.Label>Author: </Form.Label>
+					<Form.Control
+						type="text"
+						name="inputAuthor"
+						id="inputAuthor"
+					/>
+				</Form.Group>
+				<Form.Group controlId="formUrl">
+					<Form.Label>Url: </Form.Label>
+					<Form.Control type="text" name="inputUrl" id="inputUrl" />
+				</Form.Group>
+				<Button variant="primary" type="submit" id="createBlogButton">
 					Create
-				</button>
-			</form>
+				</Button>
+			</Form>
 		</div>
 	);
 };

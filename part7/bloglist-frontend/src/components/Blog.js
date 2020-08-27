@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Jumbotron } from 'react-bootstrap';
 
 import { deleteBlog, likeBlog } from '../reducers/blogsReducer';
 import { setNotification } from '../reducers/notificationReducer';
@@ -45,11 +46,7 @@ const Blog = ({ blog }) => {
 			typeof user.username !== 'undefined' &&
 			blog.user.username === user.username
 		) {
-			return (
-				<button onClick={handleDelete} className="remove-blog-button">
-					Remove
-				</button>
-			);
+			return <button onClick={handleDelete}>Remove</button>;
 		}
 		return <div></div>;
 	};
@@ -57,7 +54,7 @@ const Blog = ({ blog }) => {
 	const checkBlog = () => {
 		if (blog) {
 			return (
-				<div className="blog-element">
+				<Jumbotron>
 					<h3>
 						{blog.title} by {blog.author}
 					</h3>
@@ -66,15 +63,13 @@ const Blog = ({ blog }) => {
 					</p>
 					<p>
 						Likes: {blog.likes}
-						<button className="like-button" onClick={updateLikes}>
-							Like
-						</button>
+						<button onClick={updateLikes}>Like</button>
 					</p>
 					<p>User: {blog.user.name}</p>
 					<p>Username: {blog.user.username}</p>
 					{showRemoveButton()}
 					<Comments blog={blog} />
-				</div>
+				</Jumbotron>
 			);
 		} else {
 			return <div></div>;

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Switch, Route, Link, Redirect, useRouteMatch } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 
 import Login from './components/Login';
 import Notification from './components/Notification';
@@ -80,13 +81,9 @@ const App = () => {
 							{user ? user.username : ''} logged in
 						</span>,
 						<form className="form-inline">
-							<button
-								className="btn btn-outline-secondary"
-								onClick={logout}
-								type="button"
-							>
+							<Button onClick={logout} variant="outline-primary">
 								Log out
-							</button>
+							</Button>
 						</form>
 					]
 				) : (
